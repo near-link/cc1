@@ -179,7 +179,7 @@
     <!-- Bottom Navigation -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-3 max-w-md mx-auto z-30">
         <div class="flex items-center justify-around">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors bg-[#4A4458]">
+            <button onclick="goToHome()" id="nav-home" class="flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors bg-[#4A4458]">
                 <i data-lucide="home" class="w-5 h-5 fill-[#D0BCFF] text-[#D0BCFF]"></i>
                 <span class="text-[10px] leading-none mt-1 text-[#D0BCFF]">Home</span>
             </button>
@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <div class="fixed bottom-24 left-0 right-0 flex justify-center pointer-events-none z-[9999]">
+    <div class="fixed inset-0 flex items-center justify-center pointer-events-none z-[9999]">
         <div id="toast" class="bg-[#4A4458] text-[#EADDFF] px-5 py-2 rounded-full text-xs font-medium opacity-0 transition-all duration-300 whitespace-nowrap translate-y-4 shadow-lg"></div>
     </div>
     <script>
@@ -419,6 +419,13 @@
             switchTab('home', 'nav-menu');
             setTimeout(() => {
                 document.getElementById('all-items').scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+        }
+
+        function goToHome() {
+            switchTab('home');
+            setTimeout(() => {
+                document.getElementById('tab-home').scrollIntoView({ behavior: 'smooth' });
             }, 50);
         }
 
