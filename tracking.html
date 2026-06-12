@@ -65,14 +65,14 @@
                 <i id="geofence-icon" data-lucide="map-pin" class="w-5 h-5 text-[#CAC4D0]"></i>
                 <div class="flex-1">
                     <h4 id="geofence-title" class="text-sm text-[#E6E1E5]">📍 Distance to store</h4>
-                    <p id="geofence-desc" class="text-lg font-bold text-[#D0BCFF]">0.80 km away</p>
                 </div>
             </div>
             
             <div id="geofence-action">
-                <div class="bg-[#211F26] text-[#938F99] px-3 py-2 rounded-lg text-xs text-center">
-                    Get within 500m to enable pickup
+                <div class="bg-[#211F26] text-[#D0BCFF] px-3 py-3 rounded-xl text-lg font-bold text-center border border-[#36343B]">
+                    0.80 km away
                 </div>
+                <p class="text-center text-xs text-[#938F99] mt-2">Get within 500m to enable pickup</p>
             </div>
         </div>
 
@@ -268,7 +268,6 @@
         }
 
         function updateGeofenceUI() {
-            document.getElementById('geofence-desc').textContent = `${distance.toFixed(2)} km away`;
             const alertBox = document.getElementById('geofence-alert');
             const icon = document.getElementById('geofence-icon');
             const title = document.getElementById('geofence-title');
@@ -297,9 +296,10 @@
                 title.textContent = `📍 Distance to ${outletTypeName}`;
 
                 document.getElementById('geofence-action').innerHTML = `
-                    <div class="bg-[#211F26] text-[#938F99] px-3 py-2 rounded-lg text-xs text-center">
-                        Get within 500m to enable pickup
+                    <div class="bg-[#211F26] text-[#D0BCFF] px-3 py-3 rounded-xl text-lg font-bold text-center border border-[#36343B]">
+                        ${distance.toFixed(2)} km away
                     </div>
+                    <p class="text-center text-xs text-[#938F99] mt-2">Get within 500m to enable pickup</p>
                 `;
             }
             lucide.createIcons();
