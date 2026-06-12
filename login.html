@@ -32,12 +32,15 @@
                 <input type="password" id="password" placeholder="Enter your password" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
             </div>
 
-            <div id="error-msg" class="hidden bg-[#601410] text-[#F2B8B5] px-4 py-3 rounded-xl text-sm"></div>
+            
         </div>
 
-        <button onclick="handleLogin()" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors mb-4">
-            Sign In
+        <button id="btn-login" onclick="handleLogin()" class="w-full flex items-center justify-center gap-2 bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors mb-4">
+            <i id="login-spinner" data-lucide="loader-2" class="w-5 h-5 animate-spin hidden"></i>
+            <span id="login-text">Sign In</span>
         </button>
+
+        <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-[#4A4458] text-[#EADDFF] px-6 py-3 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-50 whitespace-nowrap"></div>
 
         <a href="register.html" class="text-[#D0BCFF] text-sm hover:text-[#E8DEF8] transition-colors">
             Don't have an account? Register here

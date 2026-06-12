@@ -159,8 +159,9 @@
             </div>
 
             <!-- Place Order Button -->
-            <button onclick="placeOrder()" id="btn-place-order" disabled class="w-full bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                Place Order - RM 0.00
+            <button onclick="placeOrder()" id="btn-place-order" disabled class="w-full flex items-center justify-center gap-2 bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <i id="place-order-spinner" data-lucide="loader-2" class="w-5 h-5 animate-spin hidden"></i>
+                <span id="place-order-text">Place Order - RM 0.00</span>
             </button>
         </div>
     </div>
@@ -178,26 +179,26 @@
     </button>
 
     <!-- Bottom Navigation -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-2 max-w-md mx-auto z-30">
+    <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-1.5 max-w-md mx-auto z-30">
         <div class="flex items-center justify-around">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors bg-[#4A4458]">
-                <i data-lucide="home" class="w-6 h-6 fill-[#D0BCFF] text-[#D0BCFF]"></i>
-                <span class="text-xs text-[#D0BCFF]">Home</span>
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-full transition-colors bg-[#4A4458]">
+                <i data-lucide="home" class="w-5 h-5 fill-[#D0BCFF] text-[#D0BCFF]"></i>
+                <span class="text-[10px] text-[#D0BCFF]">Home</span>
             </button>
-            <button onclick="goToMenu()" id="nav-menu" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
-                <i data-lucide="file-text" class="w-6 h-6 text-[#CAC4D0]"></i>
-                <span class="text-xs text-[#CAC4D0]">Menu</span>
+            <button onclick="goToMenu()" id="nav-menu" class="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-full transition-colors">
+                <i data-lucide="file-text" class="w-5 h-5 text-[#CAC4D0]"></i>
+                <span class="text-[10px] text-[#CAC4D0]">Menu</span>
             </button>
-            <button onclick="switchTab('cart')" id="nav-cart" class="relative flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
-                <i data-lucide="shopping-bag" class="w-6 h-6 text-[#CAC4D0]"></i>
-                <div id="cart-badge" class="hidden absolute top-1 right-2 w-5 h-5 bg-[#F2B8B5] rounded-full flex items-center justify-center">
-                    <span id="cart-count" class="text-xs text-[#601410] font-bold">0</span>
+            <button onclick="switchTab('cart')" id="nav-cart" class="relative flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-full transition-colors">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-[#CAC4D0]"></i>
+                <div id="cart-badge" class="hidden absolute top-0.5 right-2 w-4 h-4 bg-[#F2B8B5] rounded-full flex items-center justify-center">
+                    <span id="cart-count" class="text-[9px] text-[#601410] font-bold">0</span>
                 </div>
-                <span class="text-xs text-[#CAC4D0]">Cart</span>
+                <span class="text-[10px] text-[#CAC4D0]">Cart</span>
             </button>
-            <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
-                <i data-lucide="user" class="w-6 h-6 text-[#CAC4D0]"></i>
-                <span class="text-xs text-[#CAC4D0]">Profile</span>
+            <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-full transition-colors">
+                <i data-lucide="user" class="w-5 h-5 text-[#CAC4D0]"></i>
+                <span class="text-[10px] text-[#CAC4D0]">Profile</span>
             </button>
         </div>
     </div>
@@ -432,12 +433,21 @@
             const serviceFee = 0.50;
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = `<p class="text-[#CAC4D0] text-sm">Your cart is empty.</p>`;
+                cartItemsContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <i data-lucide="shopping-bag" class="w-16 h-16 text-[#4A4458] mb-4"></i>
+                        <p class="text-[#E6E1E5] font-medium mb-1">Your cart is empty</p>
+                        <p class="text-[#CAC4D0] text-sm mb-4">Looks like you haven't added anything yet.</p>
+                        <button onclick="goToMenu()" class="px-6 py-2 bg-[#4A4458] text-[#D0BCFF] rounded-full text-sm font-medium hover:bg-[#36343B] transition-colors">Browse Menu</button>
+                    </div>
+                `;
                 document.getElementById('subtotal').textContent = `RM 0.00`;
                 document.getElementById('total').textContent = `RM 0.00`;
                 const btn = document.getElementById('btn-place-order');
                 btn.disabled = true;
-                btn.textContent = `Place Order - RM 0.00`;
+                const text = document.getElementById('place-order-text');
+                if (text) text.textContent = `Place Order - RM 0.00`;
+                else btn.textContent = `Place Order - RM 0.00`;
             } else {
                 cartItemsContainer.innerHTML = cart.map((item, index) => {
                     let itemTotal = item.price * item.quantity;
@@ -481,7 +491,9 @@
                 document.getElementById('total').textContent = `RM ${total.toFixed(2)}`;
                 const btn = document.getElementById('btn-place-order');
                 btn.disabled = false;
-                btn.textContent = `Place Order - RM ${total.toFixed(2)}`;
+                const text = document.getElementById('place-order-text');
+                if (text) text.textContent = `Place Order - RM ${total.toFixed(2)}`;
+                else btn.textContent = `Place Order - RM ${total.toFixed(2)}`;
             }
             lucide.createIcons();
         }
@@ -521,6 +533,15 @@
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             if (cart.length === 0) return;
 
+            const btn = document.getElementById('btn-place-order');
+            const spinner = document.getElementById('place-order-spinner');
+            const text = document.getElementById('place-order-text');
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            text.textContent = 'Processing Payment...';
+
+            setTimeout(() => {
+
             let subtotal = 0;
             cart.forEach(item => {
                 let itemTotal = item.price * item.quantity;
@@ -539,8 +560,9 @@
             };
 
             localStorage.setItem('activeOrder', JSON.stringify(order));
-            localStorage.setItem('cart', '[]');
-            navigateTo('tracking.html');
+                localStorage.setItem('cart', '[]');
+                navigateTo('tracking.html');
+            }, 1500);
         }
 
         function handleLogout() {

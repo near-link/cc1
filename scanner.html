@@ -32,6 +32,7 @@
         <div id="scanning-view" class="flex flex-col items-center justify-center flex-1 px-4">
             <!-- Camera View Simulation -->
             <div class="w-full max-w-sm aspect-square bg-[#2B2930] rounded-3xl relative mb-6 overflow-hidden">
+                <div id="flash-overlay" class="absolute inset-0 bg-white opacity-0 pointer-events-none transition-opacity duration-300 z-10"></div>
                 <!-- Scanning Frame -->
                 <div class="absolute inset-0 flex items-center justify-center">
                     <div class="w-64 h-64 border-4 border-[#D0BCFF] rounded-2xl relative animate-pulse">
@@ -109,7 +110,12 @@
         }
 
         function simulateScan() {
-            showSuccess();
+            const flash = document.getElementById('flash-overlay');
+            flash.classList.replace('opacity-0', 'opacity-100');
+            setTimeout(() => {
+                flash.classList.replace('opacity-100', 'opacity-0');
+                showSuccess();
+            }, 300);
         }
 
         function submitManual() {
