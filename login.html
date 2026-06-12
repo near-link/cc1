@@ -40,7 +40,9 @@
             <span id="login-text">Sign In</span>
         </button>
 
-        <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-[#4A4458] text-[#EADDFF] px-6 py-3 rounded-full text-sm font-medium opacity-0 transition-opacity pointer-events-none z-50 whitespace-nowrap"></div>
+        <div class="fixed bottom-10 left-0 right-0 flex justify-center pointer-events-none z-[9999]">
+            <div id="toast" class="bg-[#4A4458] text-[#EADDFF] px-6 py-3 rounded-full text-sm font-medium opacity-0 transition-all duration-300 whitespace-nowrap translate-y-4 shadow-lg"></div>
+        </div>
 
         <a href="register.html" class="text-[#D0BCFF] text-sm hover:text-[#E8DEF8] transition-colors">
             Don't have an account? Register here
@@ -69,13 +71,29 @@
         const registered = existing.filter(u => u.id !== '1' && u.id !== '2');
         localStorage.setItem('users', JSON.stringify([...initialUsers, ...registered]));
 
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.remove('opacity-0', 'translate-y-4');
+            t.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                t.classList.remove('opacity-100', 'translate-y-0');
+                t.classList.add('opacity-0', 'translate-y-4');
+            }, 2000);
+        }
+
         function handleLogin() {
             const users = JSON.parse(localStorage.getItem('users'));
             const identifier = document.getElementById('identifier').value.trim();
             const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('error-msg');
+            const btn = document.getElementById('btn-login');
+            const spinner = document.getElementById('login-spinner');
+            const text = document.getElementById('login-text');
             
-            errorDiv.classList.add('hidden');
+            if (!identifier || !password) {
+                showToast('Please enter your credentials.');
+                return;
+            }
             
             const id = identifier.toLowerCase();
             const user = users.find(u => 
@@ -83,23 +101,27 @@
             );
             
             if (!user) {
-                errorDiv.textContent = 'User not found';
-                errorDiv.classList.remove('hidden');
+                showToast('User not found');
                 return;
             }
             
             if (user.password !== password) {
-                errorDiv.textContent = 'Incorrect password';
-                errorDiv.classList.remove('hidden');
+                showToast('Incorrect password');
                 return;
             }
+
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+            text.textContent = 'Signing in...';
             
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            if (user.role === 'customer') {
-                window.location.href = 'location.html';
-            } else {
-                window.location.href = 'staff.html';
-            }
+            setTimeout(() => {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                if (user.role === 'customer') {
+                    window.location.href = 'location.html';
+                } else {
+                    window.location.href = 'staff.html';
+                }
+            }, 1000);
         }
     </script>
 </body>
