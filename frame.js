@@ -9,10 +9,14 @@
     window.location.href = url;
   };
 
-  /* ── 1. Prevent flash ── */
-  var s = document.createElement('style');
-  s.textContent = 'body{background:#fff!important;margin:0}';
-  document.head.appendChild(s);
+  var isDesktop = window.innerWidth > 768;
+
+  /* ── 1. Prevent flash (only on desktop) ── */
+  if (isDesktop) {
+    var s = document.createElement('style');
+    s.textContent = 'body{background:#fff!important;margin:0}';
+    document.head.appendChild(s);
+  }
 
   /* ── 2. Inject app.css ── */
   var appCss = document.createElement('link');
@@ -21,6 +25,7 @@
   document.head.appendChild(appCss);
 
   function wrap() {
+    if (!isDesktop) return;
     if (document.querySelector('.phone-device')) return;
     document.body.classList.remove('bg-[#1C1B1F]');
 
