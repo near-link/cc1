@@ -76,12 +76,37 @@
                 </div>
             </div>
 
-            <!-- Sticky Add to Basket Button -->
-            <div class="sticky bottom-0 bg-[#1C1B1F] border-t border-[#36343B] px-6 py-4">
-                <button onclick="handleAddToCart()" id="btn-add-to-cart" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors">
-                    Add to Basket - RM 0.00
+            <!-- Sticky Add to Cart Button -->
+            <div class="sticky bottom-[72px] bg-[#1C1B1F] border-t border-[#36343B] px-6 py-4 pb-8">
+                <button onclick="handleAddToCart()" id="btn-add-to-cart" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors shadow-lg">
+                    Add to Cart - RM 0.00
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-2 max-w-md mx-auto z-[60]">
+        <div class="flex items-center justify-around">
+            <button onclick="navigateTo('home.html?tab=home')" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="home" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <span class="text-xs text-[#CAC4D0]">Home</span>
+            </button>
+            <button onclick="navigateTo('home.html?tab=menu')" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors bg-[#4A4458]">
+                <i data-lucide="file-text" class="w-6 h-6 text-[#D0BCFF] fill-[#D0BCFF]"></i>
+                <span class="text-xs text-[#D0BCFF]">Menu</span>
+            </button>
+            <button onclick="navigateTo('home.html?tab=cart')" class="relative flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="shopping-bag" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <div id="cart-badge" class="hidden absolute top-1 right-2 w-5 h-5 bg-[#F2B8B5] rounded-full flex items-center justify-center">
+                    <span id="cart-count" class="text-xs text-[#601410] font-bold">0</span>
+                </div>
+                <span class="text-xs text-[#CAC4D0]">Cart</span>
+            </button>
+            <button onclick="navigateTo('home.html?tab=profile')" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="user" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <span class="text-xs text-[#CAC4D0]">Profile</span>
+            </button>
         </div>
     </div>
 
@@ -147,7 +172,7 @@
                 activeSpicyBtn.classList.add('border-[#D0BCFF]', 'bg-[#2B2930]', 'text-[#D0BCFF]');
             }
 
-            document.getElementById('btn-add-to-cart').textContent = `Add to Basket - RM ${calculateTotal().toFixed(2)}`;
+            document.getElementById('btn-add-to-cart').textContent = `Add to Cart - RM ${calculateTotal().toFixed(2)}`;
         }
 
         function changeQuantity(delta) {
@@ -177,7 +202,13 @@
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             cart.push(cartItem);
             localStorage.setItem('cart', JSON.stringify(cart));
-            navigateTo('home.html');
+            navigateTo('home.html?tab=cart');
+        }
+
+        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (existingCart.length > 0) {
+            document.getElementById('cart-badge').classList.remove('hidden');
+            document.getElementById('cart-count').textContent = existingCart.length;
         }
 
         updateUI();

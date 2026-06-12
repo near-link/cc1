@@ -550,6 +550,16 @@
             localStorage.removeItem('activeOrder');
             navigateTo('login.html');
         }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialTab = urlParams.get('tab');
+        if (initialTab) {
+            if (initialTab === 'menu') {
+                goToMenu();
+            } else {
+                switchTab(initialTab);
+            }
+        }
     </script>
 </body>
 </html>
