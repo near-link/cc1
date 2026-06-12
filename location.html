@@ -31,7 +31,7 @@
         </div>
 
         <!-- Mahallah List -->
-        <div id="mahallah-list" class="space-y-3">
+        <div id="mahallah-list" class="space-y-4">
             <!-- Rendered by JS -->
         </div>
     </div>
@@ -90,7 +90,7 @@
             
             items.forEach(mahallah => {
                 const btn = document.createElement('button');
-                btn.className = "w-full bg-[#2B2930] rounded-2xl p-4 flex items-center gap-4 hover:bg-[#36343B] transition-colors";
+                btn.className = "w-full bg-[#2B2930] rounded-2xl p-5 flex items-center gap-4 hover:bg-[#36343B] transition-colors";
                 btn.onclick = () => selectMahallah(mahallah);
 
                 let queueDistanceHtml = '';
