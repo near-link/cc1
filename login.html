@@ -75,57 +75,7 @@
         localStorage.setItem('users', JSON.stringify([...initialUsers, ...registered]));
 
         function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.remove('opacity-0', 'translate-y-4');
-            t.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                t.classList.remove('opacity-100', 'translate-y-0');
-                t.classList.add('opacity-0', 'translate-y-4');
-            }, 2000);
-        }
-
-        function handleLogin() {
-            const users = JSON.parse(localStorage.getItem('users'));
-            const identifier = document.getElementById('identifier').value.trim();
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('btn-login');
-            const spinner = document.getElementById('login-spinner');
-            const text = document.getElementById('login-text');
-            
-            if (!identifier || !password) {
-                showToast('Please enter your credentials.');
-                return;
-            }
-            
-            const id = identifier.toLowerCase();
-            const user = users.find(u => 
-                u.email === identifier || u.matricNo === identifier || u.staffNo === identifier || (u.shorthand && u.shorthand === id)
-            );
-            
-            if (!user) {
-                showToast('User not found');
-                return;
-            }
-            
-            if (user.password !== password) {
-                showToast('Incorrect password');
-                return;
-            }
-
-            btn.disabled = true;
-            spinner.classList.remove('hidden');
-            text.textContent = 'Signing in...';
-            
-            setTimeout(() => {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                if (user.role === 'customer') {
-                    window.location.href = 'location.html';
-                } else {
-                    window.location.href = 'staff.html';
-                }
-            }, 1000);
-        }
+            alert(msg);}
     </script>
 </body>
 </html>
