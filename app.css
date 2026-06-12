@@ -1,0 +1,228 @@
+/* ═══════════════════════════════════════════════════════
+   app.css — Mobile-native look & feel
+   Normalises typography, spacing, safe areas, and
+   component polish so content looks real inside any
+   phone frame.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── 1. Typography reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+.phone-screen-scroll {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* ── 2. Safe area insets (Dynamic Island + Home indicator) ── */
+
+/* Give all top-level wrappers padding to clear the Dynamic Island */
+.phone-screen-scroll > div {
+  padding-top: 54px !important;
+}
+
+/* If the wrapper contains a sticky header, remove the wrapper padding
+   and give it to the sticky header instead so it sticks to the very top */
+.phone-screen-scroll > div:has([class*="sticky"][class*="top-0"]) {
+  padding-top: 0 !important;
+}
+
+.phone-screen-scroll [class*="sticky"][class*="top-0"] {
+  padding-top: 54px !important;
+}
+
+/* Fixed bottom elements: lift above home indicator */
+.phone-screen [class*="fixed"][class*="bottom-0"] {
+  padding-bottom: 24px !important;
+  bottom: 0 !important;
+}
+
+/* Override min-h-screen — it references browser viewport, not phone */
+.phone-screen-scroll [class*="min-h-screen"] {
+  min-height: 100% !important;
+}
+
+/* Full-screen overlay pages (menu, scanner, modals) */
+.phone-screen [class*="fixed"][class*="inset-0"] {
+  padding-top: 54px !important;
+}
+
+/* ── 3. Text scale refinements ── */
+h1, .text-xl { font-size: 20px !important; font-weight: 600 !important; letter-spacing: -0.02em; }
+h2, .text-lg { font-size: 17px !important; font-weight: 600 !important; letter-spacing: -0.01em; }
+h3 { font-size: 15px !important; font-weight: 600 !important; }
+h4 { font-size: 14px !important; font-weight: 500 !important; }
+.text-sm { font-size: 13px !important; }
+.text-xs { font-size: 11px !important; }
+.text-2xl { font-size: 22px !important; font-weight: 700 !important; }
+
+/* ── 4. Input & button refinements ── */
+input, textarea, select {
+  font-size: 15px !important;    /* prevents iOS zoom */
+  font-family: inherit;
+  border-radius: 12px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Primary CTA buttons — pill shaped */
+button[class*="rounded-full"][class*="bg-[#D0BCFF]"] {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+
+/* ── 5. Card refinements ── */
+[class*="rounded-2xl"][class*="bg-[#2B2930]"],
+[class*="rounded-2xl"][class*="bg-[#4A4458]"] {
+  border-radius: 16px !important;
+}
+
+[class*="rounded-3xl"] {
+  border-radius: 20px !important;
+}
+
+[class*="rounded-xl"] {
+  border-radius: 12px !important;
+}
+
+/* ── 6. Image polish ── */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+img[class*="rounded-xl"] {
+  border-radius: 12px !important;
+}
+
+/* ── 7. Bottom tab bar — native iOS style ── */
+.phone-screen [class*="fixed"][class*="bottom-0"][class*="bg-[#211F26]"] {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(33, 31, 38, 0.85) !important;
+  border-top: 0.5px solid rgba(255,255,255,0.08) !important;
+}
+
+/* Tab bar icons */
+.phone-screen [class*="fixed"][class*="bottom-0"] button i {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.phone-screen [class*="fixed"][class*="bottom-0"] button span {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+}
+
+/* ── 8. Active order widget ── */
+button[id="active-order-widget"] {
+  bottom: 90px !important; /* above tab bar + home indicator */
+  left: 12px !important;
+  right: 12px !important;
+  border-radius: 16px !important;
+  font-size: 13px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+/* ── 9. Sticky headers — blur effect ── */
+[class*="sticky"][class*="top-0"][class*="bg-[#1C1B1F]"] {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(28, 27, 31, 0.88) !important;
+  border-bottom: 0.5px solid rgba(255,255,255,0.06) !important;
+}
+
+/* ── 10. Scroll behaviour ── */
+.phone-screen-scroll {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+}
+
+/* ── 11. Status bar text (faux) ── */
+.phone-screen::after {
+  content: '9:41';
+  position: absolute;
+  top: 16px;
+  left: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 9999;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  letter-spacing: 0;
+}
+
+/* Status bar right icons (signal + wifi + battery) — SVG embedded */
+.phone-status-right {
+  position: absolute;
+  top: 14px;
+  right: 24px;
+  z-index: 9999;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── 11b. Scrollable pages: make sure content ends above fixed bars ── */
+.phone-screen-scroll > div[class*="pb-24"] {
+  padding-bottom: 110px !important; /* tab bar height + home indicator + gap */
+}
+
+.phone-screen-scroll > div[class*="pb-32"] {
+  padding-bottom: 110px !important;
+}
+
+/* Cart/checkout fixed bottom button area */
+.phone-screen [class*="fixed"][class*="bottom-0"][class*="bg-[#211F26]"] {
+  padding-bottom: 28px !important;
+}
+
+/* ── 12. Transition polish ── */
+a, button {
+  transition: opacity 0.15s ease, background-color 0.2s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+/* ── 13. Gradient banner polish ── */
+[class*="bg-gradient-to-r"][class*="from-[#4F378B]"] {
+  border-radius: 16px !important;
+  padding: 20px !important;
+}
+
+/* ── 14. Full-screen overlays (menu, scanner, QR) ── */
+.phone-screen [class*="fixed"][class*="inset-0"] {
+  border-radius: 0 !important;
+}
+
+/* ── 15. Profile avatar ── */
+div[class*="w-16"][class*="h-16"][class*="rounded-full"] {
+  width: 56px !important;
+  height: 56px !important;
+}
+
+/* ── 16. Category grid ── */
+div[id="categories-container"] button {
+  padding: 10px 4px !important;
+  border-radius: 14px !important;
+}
+
+div[id="categories-container"] button .text-2xl {
+  font-size: 24px !important;
+}

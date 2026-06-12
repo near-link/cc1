@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Order Tracking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1C1B1F]">
+    <!-- QR Modal -->
+    <div id="qr-modal" class="hidden w-full min-h-screen bg-[#1C1B1F] px-4 py-6 max-w-md mx-auto flex-col items-center justify-center fixed inset-0 z-50">
+        <div class="bg-[#2B2930] rounded-3xl p-8 w-full max-w-md">
+            <div class="text-center mb-6">
+                <h2 class="text-[#E6E1E5] mb-2 font-semibold text-xl">Show QR to Staff</h2>
+                <p id="qr-order-id" class="text-[#CAC4D0] text-sm">Order #</p>
+            </div>
+
+            <!-- QR Code Display -->
+            <div class="bg-white rounded-2xl p-8 mb-6 flex items-center justify-center">
+                <i data-lucide="qr-code" class="w-48 h-48 text-[#1C1B1F]"></i>
+            </div>
+
+            <!-- QR Code Text -->
+            <div class="bg-[#211F26] rounded-xl p-4 mb-4">
+                <p class="text-[#938F99] text-xs text-center mb-1">Verification Code</p>
+                <p id="qr-code-text" class="text-[#D0BCFF] text-center font-mono break-all"></p>
+            </div>
+
+            <div class="text-center mb-6">
+                <p class="text-[#CAC4D0] text-xs">Code refreshes every 60 seconds</p>
+            </div>
+
+            <button onclick="pickupComplete()" class="w-full bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors mb-3">
+                Order Collected
+            </button>
+
+            <button onclick="document.getElementById('qr-modal').classList.replace('flex', 'hidden')" class="w-full text-[#CAC4D0] text-sm hover:text-[#E6E1E5] transition-colors">
+                Back to Order Details
+            </button>
+        </div>
+    </div>
+
+    <!-- Main View -->
+    <div id="main-view" class="w-full min-h-screen bg-[#1C1B1F] px-4 py-6 max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8 relative">
+            <button onclick="window.location.href='home.html'" class="absolute left-0 top-0 w-10 h-10 rounded-full hover:bg-[#2B2930] flex items-center justify-center">
+                <i data-lucide="arrow-left" class="w-5 h-5 text-[#CAC4D0]"></i>
+            </button>
+            <div id="status-icon-bg" class="w-20 h-20 bg-[#4A4458] rounded-full flex items-center justify-center mx-auto mb-4">
+                <i id="header-icon" data-lucide="clock" class="w-10 h-10 text-[#D0BCFF]"></i>
+            </div>
+            <h1 id="header-title" class="text-[#E6E1E5] mb-2 text-xl font-semibold">
+                Preparing Your Order
+            </h1>
+            <p id="header-order-id" class="text-[#CAC4D0]">Order #</p>
+        </div>
+
+        <!-- Geofencing Proximity Alert -->
+        <div id="geofence-alert" class="hidden rounded-2xl p-4 mb-6 bg-[#2B2930]">
+            <div class="flex items-center gap-3 mb-3">
+                <i id="geofence-icon" data-lucide="map-pin" class="w-5 h-5 text-[#CAC4D0]"></i>
+                <div class="flex-1">
+                    <h4 id="geofence-title" class="text-sm text-[#E6E1E5]">📍 Distance to store</h4>
+                    <p id="geofence-desc" class="text-xs text-[#CAC4D0]">0.80 km away</p>
+                </div>
+            </div>
+            
+            <div id="geofence-action">
+                <div class="bg-[#211F26] text-[#938F99] px-3 py-2 rounded-lg text-xs text-center">
+                    Get within 500m to enable pickup
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status Progress -->
+        <div class="bg-[#2B2930] rounded-2xl p-6 mb-6">
+            <div class="space-y-6">
+                <!-- Step 1: Order Sent -->
+                <div class="flex items-start gap-4">
+                    <div class="flex flex-col items-center">
+                        <div id="step-1-circle" class="w-10 h-10 rounded-full flex items-center justify-center bg-[#D0BCFF]">
+                            <i data-lucide="check-circle-2" class="w-6 h-6 text-[#381E72]"></i>
+                        </div>
+                        <div id="step-1-line" class="w-0.5 h-12 mt-2 bg-[#49454F]"></div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h4 class="mb-1 text-[#E6E1E5]">Order Sent</h4>
+                        <p class="text-sm text-[#CAC4D0]">Your order has been received</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Preparing -->
+                <div class="flex items-start gap-4">
+                    <div class="flex flex-col items-center">
+                        <div id="step-2-circle" class="w-10 h-10 rounded-full flex items-center justify-center relative bg-[#49454F]">
+                            <i id="step-2-icon" data-lucide="check-circle-2" class="w-6 h-6 text-[#938F99]"></i>
+                            <div id="step-2-ping" class="hidden absolute inset-0 rounded-full border-2 border-[#D0BCFF] animate-ping"></div>
+                        </div>
+                        <div id="step-2-line" class="w-0.5 h-12 mt-2 bg-[#49454F]"></div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h4 id="step-2-title" class="mb-1 text-[#938F99]">Preparing</h4>
+                        <p id="step-2-desc" class="text-sm text-[#CAC4D0]">Not started yet</p>
+                        <div id="step-2-est" class="hidden mt-2 text-sm text-[#D0BCFF]">Estimated time: 10-15 minutes</div>
+                        
+                        <!-- Progress Bar -->
+                        <div id="step-2-progress-container" class="hidden w-full h-1.5 bg-[#49454F] rounded-full mt-3 overflow-hidden">
+                            <div id="step-2-progress-bar" class="h-full bg-[#D0BCFF] transition-all ease-linear" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Ready for Pickup -->
+                <div class="flex items-start gap-4">
+                    <div class="flex flex-col items-center">
+                        <div id="step-3-circle" class="w-10 h-10 rounded-full flex items-center justify-center bg-[#49454F]">
+                            <i id="step-3-icon" data-lucide="package-check" class="w-6 h-6 text-[#938F99]"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 pt-2">
+                        <h4 id="step-3-title" class="mb-1 text-[#938F99]">Ready for Pickup</h4>
+                        <p id="step-3-desc" class="text-sm text-[#CAC4D0]">Almost there...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pickup Location -->
+        <div class="bg-[#2B2930] rounded-2xl p-4 mb-6">
+            <h4 class="text-[#E6E1E5] mb-3">Pickup Location</h4>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-[#4A4458] rounded-full flex items-center justify-center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="#D0BCFF"/>
+                    </svg>
+                </div>
+                <div>
+                    <p id="pickup-location-name" class="text-[#E6E1E5]"></p>
+                    <p id="pickup-counter-name" class="text-sm text-[#CAC4D0]">Cafeteria Counter</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="bg-[#2B2930] rounded-2xl p-4 mb-6">
+            <h4 class="text-[#E6E1E5] mb-3">Order Summary</h4>
+            <div id="order-summary-list" class="space-y-2">
+            </div>
+            <div class="border-t border-[#49454F] pt-2 mt-2 flex justify-between">
+                <span class="text-[#E6E1E5]">Total</span>
+                <span id="order-total" class="text-[#D0BCFF]">RM 0.00</span>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <div id="action-container" class="space-y-3 pb-8">
+            <div class="text-center">
+                <p class="text-sm text-[#CAC4D0]">We'll notify you when your order is ready</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const activeOrder = JSON.parse(localStorage.getItem('activeOrder'));
+        if (!activeOrder) window.location.href = 'home.html';
+
+        const mahallah = JSON.parse(localStorage.getItem('selectedMahallah'));
+        document.getElementById('pickup-location-name').textContent = mahallah.name;
+        
+        const outletTypeName = mahallah.type === 'mart' ? 'mart' : 'cafe';
+        document.getElementById('pickup-counter-name').textContent = mahallah.type === 'mart' ? 'Mart Counter' : 'Cafeteria Counter';
+
+        document.getElementById('header-order-id').textContent = `Order #${activeOrder.id}`;
+        document.getElementById('qr-order-id').textContent = `Order #${activeOrder.id}`;
+        
+        let subtotal = 0;
+        const summaryHtml = activeOrder.items.map(item => {
+            let itemTotal = item.price * item.quantity;
+            if (item.customizations?.addEgg) itemTotal += 1.00 * item.quantity;
+            return `
+                <div class="flex justify-between text-sm">
+                    <span class="text-[#CAC4D0]">${item.quantity}x ${item.name}</span>
+                    <span class="text-[#E6E1E5]">RM ${itemTotal.toFixed(2)}</span>
+                </div>
+            `;
+        }).join('');
+        document.getElementById('order-summary-list').innerHTML = summaryHtml;
+        document.getElementById('order-total').textContent = `RM ${activeOrder.total.toFixed(2)}`;
+
+        let distance = 0.8;
+        let isNearby = false;
+        
+        function updateUI() {
+            const step = activeOrder.status === 'sent' ? 1 : (activeOrder.status === 'preparing' ? 2 : 3);
+            
+            // Header
+            if (step === 3) {
+                document.getElementById('header-title').textContent = 'Order Ready!';
+                document.getElementById('header-icon').setAttribute('data-lucide', 'package-check');
+            } else {
+                document.getElementById('header-title').textContent = 'Preparing Your Order';
+                document.getElementById('header-icon').setAttribute('data-lucide', 'clock');
+            }
+            lucide.createIcons(); // refresh icons
+
+            // Step 2
+            if (step >= 2) {
+                document.getElementById('step-1-line').classList.replace('bg-[#49454F]', 'bg-[#D0BCFF]');
+                document.getElementById('step-2-circle').classList.replace('bg-[#49454F]', 'bg-[#D0BCFF]');
+                document.getElementById('step-2-title').classList.replace('text-[#938F99]', 'text-[#E6E1E5]');
+                document.getElementById('step-2-desc').textContent = `The ${outletTypeName} is preparing your order`;
+                
+                if (step === 2) {
+                    document.getElementById('step-2-icon').setAttribute('data-lucide', 'clock');
+                    document.getElementById('step-2-icon').classList.replace('text-[#938F99]', 'text-[#381E72]');
+                    document.getElementById('step-2-icon').classList.add('animate-pulse');
+                    document.getElementById('step-2-ping').classList.remove('hidden');
+                    document.getElementById('step-2-est').classList.remove('hidden');
+                    document.getElementById('step-2-progress-container').classList.remove('hidden');
+                } else {
+                    document.getElementById('step-2-icon').setAttribute('data-lucide', 'check-circle-2');
+                    document.getElementById('step-2-icon').classList.replace('text-[#938F99]', 'text-[#381E72]');
+                    document.getElementById('step-2-icon').classList.remove('animate-pulse');
+                    document.getElementById('step-2-ping').classList.add('hidden');
+                    document.getElementById('step-2-est').classList.add('hidden');
+                    document.getElementById('step-2-progress-container').classList.add('hidden');
+                }
+            }
+
+            // Step 3
+            if (step === 3) {
+                document.getElementById('step-2-line').classList.replace('bg-[#49454F]', 'bg-[#D0BCFF]');
+                document.getElementById('step-3-circle').classList.replace('bg-[#49454F]', 'bg-[#D0BCFF]');
+                document.getElementById('step-3-title').classList.replace('text-[#938F99]', 'text-[#E6E1E5]');
+                document.getElementById('step-3-desc').textContent = 'Your order is ready to collect!';
+                document.getElementById('step-3-icon').classList.replace('text-[#938F99]', 'text-[#381E72]');
+
+                // Geofence alert
+                document.getElementById('geofence-alert').classList.remove('hidden');
+                updateGeofenceUI();
+
+                // Actions
+                if (!isNearby) {
+                    document.getElementById('action-container').innerHTML = `
+                        <div class="text-center bg-[#2B2930] rounded-xl p-4">
+                            <p class="text-sm text-[#CAC4D0] mb-2">Head to the ${outletTypeName} to collect your order</p>
+                            <p class="text-xs text-[#938F99]">QR code will be available when you arrive</p>
+                        </div>
+                        <button onclick="window.location.href='home.html'" class="w-full bg-[#49454F] text-[#CAC4D0] font-semibold py-4 rounded-full hover:bg-[#36343B] transition-colors">
+                            Back to Home
+                        </button>
+                    `;
+                } else {
+                    document.getElementById('action-container').innerHTML = `
+                        <button onclick="window.location.href='home.html'" class="w-full bg-[#49454F] text-[#CAC4D0] font-semibold py-4 rounded-full hover:bg-[#36343B] transition-colors">
+                            Back to Home
+                        </button>
+                    `;
+                }
+            }
+            lucide.createIcons();
+        }
+
+        function updateGeofenceUI() {
+            document.getElementById('geofence-desc').textContent = `${distance.toFixed(2)} km away`;
+            const alertBox = document.getElementById('geofence-alert');
+            const icon = document.getElementById('geofence-icon');
+            const title = document.getElementById('geofence-title');
+            
+            if (isNearby) {
+                alertBox.classList.replace('bg-[#2B2930]', 'bg-[#1F3823]');
+                alertBox.classList.add('border-2', 'border-[#A8DAB5]');
+                icon.classList.replace('text-[#CAC4D0]', 'text-[#A8DAB5]');
+                title.classList.replace('text-[#E6E1E5]', 'text-[#A8DAB5]');
+                title.textContent = `📍 You're near the ${outletTypeName}!`;
+                
+                document.getElementById('geofence-action').innerHTML = `
+                    <div class="bg-[#A8DAB5] text-[#1F3823] px-3 py-2 rounded-lg text-sm mb-3 text-center font-medium animate-pulse">
+                        ✓ Within pickup range
+                    </div>
+                    <button onclick="showQR()" class="w-full bg-[#D0BCFF] font-semibold text-[#381E72] py-3 rounded-full hover:bg-[#E8DEF8] transition-colors flex items-center justify-center gap-2">
+                        <i data-lucide="qr-code" class="w-5 h-5"></i>
+                        <span>I'm Here - Show QR Code</span>
+                    </button>
+                `;
+            } else {
+                alertBox.classList.replace('bg-[#1F3823]', 'bg-[#2B2930]');
+                alertBox.classList.remove('border-2', 'border-[#A8DAB5]');
+                icon.classList.replace('text-[#A8DAB5]', 'text-[#CAC4D0]');
+                title.classList.replace('text-[#A8DAB5]', 'text-[#E6E1E5]');
+                title.textContent = `📍 Distance to ${outletTypeName}`;
+
+                document.getElementById('geofence-action').innerHTML = `
+                    <div class="bg-[#211F26] text-[#938F99] px-3 py-2 rounded-lg text-xs text-center">
+                        Get within 500m to enable pickup
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function showQR() {
+            const qrText = `PICKUP-${activeOrder.id}-${Date.now()}`;
+            document.getElementById('qr-code-text').textContent = qrText;
+            document.getElementById('qr-modal').classList.replace('hidden', 'flex');
+        }
+
+        function pickupComplete() {
+            // Remove active order and go to review screen
+            window.location.href = 'review.html';
+        }
+
+        updateUI();
+
+        let progressInterval;
+        
+        function simulatePreparingProgress(durationMs) {
+            const bar = document.getElementById('step-2-progress-bar');
+            let startTime = Date.now();
+            
+            bar.style.transitionDuration = '100ms';
+            
+            progressInterval = setInterval(() => {
+                let elapsed = Date.now() - startTime;
+                let percentage = Math.min((elapsed / durationMs) * 100, 100);
+                bar.style.width = `${percentage}%`;
+                
+                if (percentage >= 100) {
+                    clearInterval(progressInterval);
+                }
+            }, 100);
+        }
+
+        // Simulate order status updates
+        if (activeOrder.status === 'sent') {
+            setTimeout(() => {
+                activeOrder.status = 'preparing';
+                localStorage.setItem('activeOrder', JSON.stringify(activeOrder));
+                updateUI();
+                simulatePreparingProgress(4000);
+                
+                setTimeout(() => {
+                    activeOrder.status = 'ready';
+                    localStorage.setItem('activeOrder', JSON.stringify(activeOrder));
+                    updateUI();
+                }, 4000); // 4s to ready
+            }, 3000); // 3s to preparing
+        } else if (activeOrder.status === 'preparing') {
+            simulatePreparingProgress(3000);
+            setTimeout(() => {
+                activeOrder.status = 'ready';
+                localStorage.setItem('activeOrder', JSON.stringify(activeOrder));
+                updateUI();
+            }, 3000); // 3s to ready
+        }
+
+        // Simulate movement
+        setInterval(() => {
+            if (activeOrder.status === 'ready' && distance > 0.4) {
+                distance -= 0.1;
+                if (distance <= 0.5 && !isNearby) {
+                    isNearby = true;
+                }
+                updateGeofenceUI();
+                updateUI(); // to refresh action container
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

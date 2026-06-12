@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1C1B1F]">
+    <div class="w-full min-h-screen px-4 py-8 flex flex-col items-center justify-center max-w-md mx-auto">
+        <!-- Logo and Header -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#6750A4] to-[#D0BCFF] rounded-3xl flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="log-in" class="w-10 h-10 text-white"></i>
+            </div>
+            <h1 class="text-[#E6E1E5] mb-2 text-xl font-semibold">Welcome to Cafe & Mart Click</h1>
+            <p class="text-[#CAC4D0] text-sm">Sign in to continue</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="w-full space-y-4 mb-6">
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Email / Matric No / Staff No</label>
+                <input type="text" id="identifier" placeholder="student@iium.edu.my or 2012345" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div id="error-msg" class="hidden bg-[#601410] text-[#F2B8B5] px-4 py-3 rounded-xl text-sm"></div>
+        </div>
+
+        <button onclick="handleLogin()" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors mb-4">
+            Sign In
+        </button>
+
+        <a href="register.html" class="text-[#D0BCFF] text-sm hover:text-[#E8DEF8] transition-colors">
+            Don't have an account? Register here
+        </a>
+
+        <!-- Demo Credentials -->
+        <div class="mt-8 p-4 bg-[#2B2930] rounded-xl w-full">
+            <p class="text-[#CAC4D0] text-xs mb-2">Demo Credentials:</p>
+            <div class="space-y-1 text-xs text-[#938F99]">
+                <p>Customer: student / 123</p>
+                <p>Staff: staff / 123</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Always reset demo users so shorthand logins work
+        const initialUsers = [
+            { id: '1', name: 'Ahmad Student', email: 'student@iium.edu.my', password: '123', role: 'customer', matricNo: '2012345', shorthand: 'student' },
+            { id: '2', name: 'Outlet Staff', email: 'staff@iium.edu.my', password: '123', role: 'staff', staffNo: 'STF001', shorthand: 'staff' }
+        ];
+        // Merge with any registered users
+        const existing = JSON.parse(localStorage.getItem('users') || '[]');
+        const registered = existing.filter(u => u.id !== '1' && u.id !== '2');
+        localStorage.setItem('users', JSON.stringify([...initialUsers, ...registered]));
+
+        function handleLogin() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error-msg');
+            
+            errorDiv.classList.add('hidden');
+            
+            const id = identifier.toLowerCase();
+            const user = users.find(u => 
+                u.email === identifier || u.matricNo === identifier || u.staffNo === identifier || (u.shorthand && u.shorthand === id)
+            );
+            
+            if (!user) {
+                errorDiv.textContent = 'User not found';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            if (user.password !== password) {
+                errorDiv.textContent = 'Incorrect password';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            if (user.role === 'customer') {
+                window.location.href = 'location.html';
+            } else {
+                window.location.href = 'staff.html';
+            }
+        }
+    </script>
+</body>
+</html>

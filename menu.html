@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Menu Customization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1C1B1F]">
+    <div class="fixed inset-0 z-50 flex items-end justify-center max-w-md mx-auto">
+        <div class="bg-[#1C1B1F] rounded-t-3xl w-full max-h-[100vh] h-full overflow-y-auto animate-slide-up flex flex-col">
+            <!-- Header -->
+            <div class="sticky top-0 bg-[#1C1B1F] z-10 px-6 py-4 border-b border-[#36343B] flex items-center justify-between">
+                <h3 class="text-[#E6E1E5]">Customize Order</h3>
+                <button onclick="navigateTo('home.html')" class="w-8 h-8 rounded-full hover:bg-[#2B2930] flex items-center justify-center">
+                    <i data-lucide="x" class="w-5 h-5 text-[#CAC4D0]"></i>
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="px-6 py-6 flex-1">
+                <!-- Item Image -->
+                <img id="item-image" class="w-full h-48 rounded-2xl object-cover mb-6" src="" alt="Item">
+
+                <!-- Item Info -->
+                <div class="mb-6">
+                    <h2 id="item-name" class="text-[#E6E1E5] mb-2 text-xl font-semibold">Loading...</h2>
+                    <p id="item-price" class="text-[#D0BCFF]">RM 0.00</p>
+                </div>
+
+                <!-- Quantity -->
+                <div class="mb-6">
+                    <h4 class="text-[#E6E1E5] mb-3">Quantity</h4>
+                    <div class="flex items-center gap-4">
+                        <button id="btn-minus" onclick="changeQuantity(-1)" class="w-10 h-10 rounded-full bg-[#4A4458] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i data-lucide="minus" class="w-5 h-5 text-[#D0BCFF]"></i>
+                        </button>
+                        <span id="quantity-display" class="text-[#E6E1E5] min-w-[40px] text-center">1</span>
+                        <button onclick="changeQuantity(1)" class="w-10 h-10 rounded-full bg-[#4A4458] flex items-center justify-center">
+                            <i data-lucide="plus" class="w-5 h-5 text-[#D0BCFF]"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add-ons -->
+                <div id="addons-container" class="mb-6 hidden">
+                    <h4 class="text-[#E6E1E5] mb-3">Add-ons</h4>
+                    <button id="btn-add-egg" onclick="toggleEgg()" class="w-full flex items-center justify-between p-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F]">
+                        <div class="flex items-center gap-3">
+                            <div id="egg-checkbox" class="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#938F99]">
+                                <!-- Checkmark SVG added via JS when active -->
+                            </div>
+                            <span class="text-[#E6E1E5]">Add Egg</span>
+                        </div>
+                        <span class="text-[#D0BCFF]">+RM 1.00</span>
+                    </button>
+                </div>
+
+                <!-- Spicy Level -->
+                <div id="spicy-container" class="mb-6 hidden">
+                    <h4 class="text-[#E6E1E5] mb-3">Spicy Level</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setSpicy('mild')" id="spicy-mild" class="spicy-btn py-3 px-4 rounded-xl border-2 transition-colors border-[#D0BCFF] bg-[#2B2930] text-[#D0BCFF]">
+                            🌶️ Mild
+                        </button>
+                        <button onclick="setSpicy('medium')" id="spicy-medium" class="spicy-btn py-3 px-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F] text-[#938F99]">
+                            🌶️🌶️ Medium
+                        </button>
+                        <button onclick="setSpicy('hot')" id="spicy-hot" class="spicy-btn py-3 px-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F] text-[#938F99]">
+                            🌶️🌶️🌶️ Hot
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Add to Basket Button -->
+            <div class="sticky bottom-0 bg-[#1C1B1F] border-t border-[#36343B] px-6 py-4">
+                <button onclick="handleAddToCart()" id="btn-add-to-cart" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors">
+                    Add to Basket - RM 0.00
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const item = JSON.parse(localStorage.getItem('selectedMenuItem'));
+        if (!item) navigateTo('home.html');
+
+        let quantity = 1;
+        let addEgg = false;
+        let spicyLevel = 'mild';
+
+        // Initialize UI
+        document.getElementById('item-image').src = item.image;
+        document.getElementById('item-name').textContent = item.name;
+        document.getElementById('item-price').textContent = `RM ${item.price.toFixed(2)}`;
+
+        const mahallah = JSON.parse(localStorage.getItem('selectedMahallah'));
+        const isMart = mahallah && mahallah.type === 'mart';
+
+        if (!isMart && item.category !== 'drinks') {
+            document.getElementById('addons-container').classList.remove('hidden');
+        }
+        
+        if (!isMart && (item.category === 'rice' || item.category === 'noodles')) {
+            document.getElementById('spicy-container').classList.remove('hidden');
+        }
+
+        function calculateTotal() {
+            let total = item.price * quantity;
+            if (addEgg) total += 1.00 * quantity;
+            return total;
+        }
+
+        function updateUI() {
+            document.getElementById('quantity-display').textContent = quantity;
+            document.getElementById('btn-minus').disabled = quantity <= 1;
+
+            const eggBtn = document.getElementById('btn-add-egg');
+            const eggCheckbox = document.getElementById('egg-checkbox');
+            if (addEgg) {
+                eggBtn.classList.replace('border-[#49454F]', 'border-[#D0BCFF]');
+                eggBtn.classList.replace('bg-[#1C1B1F]', 'bg-[#2B2930]');
+                eggCheckbox.classList.replace('border-[#938F99]', 'border-[#D0BCFF]');
+                eggCheckbox.classList.add('bg-[#D0BCFF]');
+                eggCheckbox.innerHTML = `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="#381E72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            } else {
+                eggBtn.classList.replace('border-[#D0BCFF]', 'border-[#49454F]');
+                eggBtn.classList.replace('bg-[#2B2930]', 'bg-[#1C1B1F]');
+                eggCheckbox.classList.replace('border-[#D0BCFF]', 'border-[#938F99]');
+                eggCheckbox.classList.remove('bg-[#D0BCFF]');
+                eggCheckbox.innerHTML = '';
+            }
+
+            document.querySelectorAll('.spicy-btn').forEach(btn => {
+                btn.classList.remove('border-[#D0BCFF]', 'bg-[#2B2930]', 'text-[#D0BCFF]');
+                btn.classList.add('border-[#49454F]', 'bg-[#1C1B1F]', 'text-[#938F99]');
+            });
+            const activeSpicyBtn = document.getElementById(`spicy-${spicyLevel}`);
+            if (activeSpicyBtn) {
+                activeSpicyBtn.classList.remove('border-[#49454F]', 'bg-[#1C1B1F]', 'text-[#938F99]');
+                activeSpicyBtn.classList.add('border-[#D0BCFF]', 'bg-[#2B2930]', 'text-[#D0BCFF]');
+            }
+
+            document.getElementById('btn-add-to-cart').textContent = `Add to Basket - RM ${calculateTotal().toFixed(2)}`;
+        }
+
+        function changeQuantity(delta) {
+            quantity = Math.max(1, quantity + delta);
+            updateUI();
+        }
+
+        function toggleEgg() {
+            addEgg = !addEgg;
+            updateUI();
+        }
+
+        function setSpicy(level) {
+            spicyLevel = level;
+            updateUI();
+        }
+
+        function handleAddToCart() {
+            const cartItem = {
+                ...item,
+                quantity,
+                customizations: {
+                    addEgg,
+                    spicyLevel
+                }
+            };
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.push(cartItem);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            navigateTo('home.html');
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>

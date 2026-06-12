@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - QR Scanner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 100%; }
+            100% { top: 0; }
+        }
+        .animate-scan {
+            animation: scan 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#1C1B1F]">
+    <div class="fixed inset-0 bg-[#1C1B1F] z-50 max-w-md mx-auto flex flex-col">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 py-4 bg-[#2B2930]">
+            <h2 class="text-[#E6E1E5]">Scan Customer QR</h2>
+            <button onclick="navigateTo('staff.html')" class="p-2 bg-[#49454F] rounded-lg hover:bg-[#36343B] transition-colors">
+                <i data-lucide="x" class="w-5 h-5 text-[#E6E1E5]"></i>
+            </button>
+        </div>
+
+        <div id="scanning-view" class="flex flex-col items-center justify-center flex-1 px-4">
+            <!-- Camera View Simulation -->
+            <div class="w-full max-w-sm aspect-square bg-[#2B2930] rounded-3xl relative mb-6 overflow-hidden">
+                <!-- Scanning Frame -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-64 h-64 border-4 border-[#D0BCFF] rounded-2xl relative animate-pulse">
+                        <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#D0BCFF]"></div>
+                        <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#D0BCFF]"></div>
+                        <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#D0BCFF]"></div>
+                        <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#D0BCFF]"></div>
+                        <div class="absolute inset-x-0 top-0 h-1 bg-[#D0BCFF] animate-scan"></div>
+                    </div>
+                </div>
+
+                <!-- Camera Icon -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-20">
+                    <i data-lucide="camera" class="w-32 h-32 text-[#CAC4D0]"></i>
+                </div>
+            </div>
+
+            <div class="text-center mb-6">
+                <p class="text-[#E6E1E5] mb-2">Position QR code within frame</p>
+                <p class="text-[#CAC4D0] text-sm">Camera will scan automatically</p>
+            </div>
+
+            <button onclick="simulateScan()" class="w-full max-w-sm bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors mb-3">
+                Simulate Scan (Demo)
+            </button>
+
+            <button onclick="showManual()" class="text-[#D0BCFF] text-sm hover:text-[#E8DEF8] transition-colors">
+                Enter code manually
+            </button>
+        </div>
+
+        <div id="manual-view" class="hidden flex-col items-center justify-center flex-1 px-4">
+            <div class="w-full max-w-sm">
+                <h3 class="text-[#E6E1E5] text-center mb-6 font-semibold">Manual Code Entry</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[#CAC4D0] text-sm mb-2">Verification Code</label>
+                        <input type="text" id="manual-code" placeholder="PICKUP-XXXX-XXXXX" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF] font-mono" />
+                    </div>
+
+                    <button onclick="submitManual()" class="w-full bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors">
+                        Verify Code
+                    </button>
+                </div>
+
+                <button onclick="showScanner()" class="w-full text-[#CAC4D0] text-sm mt-4 hover:text-[#E6E1E5] transition-colors">
+                    Back to scanning
+                </button>
+            </div>
+        </div>
+
+        <div id="success-view" class="hidden flex-col items-center justify-center flex-1 px-4">
+            <div class="text-center">
+                <div class="w-24 h-24 bg-[#A8DAB5] rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i data-lucide="check-circle" class="w-12 h-12 text-[#1F3823]"></i>
+                </div>
+                <h2 class="text-[#E6E1E5] mb-2 text-xl font-semibold">Scan Successful!</h2>
+                <p class="text-[#CAC4D0] text-sm">Order verified</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function showManual() {
+            document.getElementById('scanning-view').classList.replace('flex', 'hidden');
+            document.getElementById('manual-view').classList.replace('hidden', 'flex');
+        }
+
+        function showScanner() {
+            document.getElementById('manual-view').classList.replace('flex', 'hidden');
+            document.getElementById('scanning-view').classList.replace('hidden', 'flex');
+        }
+
+        function simulateScan() {
+            showSuccess();
+        }
+
+        function submitManual() {
+            const code = document.getElementById('manual-code').value;
+            if (code.trim()) {
+                showSuccess();
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('scanning-view').classList.replace('flex', 'hidden');
+            document.getElementById('manual-view').classList.replace('flex', 'hidden');
+            document.getElementById('success-view').classList.replace('hidden', 'flex');
+            
+            setTimeout(() => {
+                navigateTo('staff.html');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

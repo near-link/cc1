@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .app-toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%) translateY(20px); background: #4A4458; color: #EADDFF; padding: 12px 24px; border-radius: 100px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s ease; pointer-events: none; z-index: 9999; white-space: nowrap; }
+        .app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body class="bg-[#1C1B1F]">
+    <!-- Home Tab -->
+    <div id="tab-home" class="tab-content active w-full min-h-screen pb-24 max-w-md mx-auto">
+        <!-- Header with Location Switcher -->
+        <div class="sticky top-0 bg-[#1C1B1F] z-10 px-4 py-4 border-b border-[#36343B]">
+            <a href="location.html" class="flex items-center gap-2 text-[#D0BCFF] hover:bg-[#2B2930] px-3 py-2 rounded-lg transition-colors w-max">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                </svg>
+                <span id="mahallah-name" class="text-[#D0BCFF]">Loading...</span>
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </a>
+        </div>
+
+        <!-- Content -->
+        <div class="px-4 py-4">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-r from-[#4F378B] to-[#6750A4] rounded-3xl p-6 mb-6 text-white">
+                <h2 id="welcome-message" class="mb-2 text-lg font-semibold">Welcome</h2>
+                <p id="special-text" class="text-sm text-white/90">Today's Special: Nasi Goreng USA with Free Egg!</p>
+            </div>
+
+            <!-- Quick Filters -->
+            <div class="mb-6">
+                <h3 class="text-[#E6E1E5] mb-3">Categories</h3>
+                <div id="categories-container" class="grid grid-cols-4 gap-2">
+                    <!-- Rendered dynamically by JS -->
+                </div>
+            </div>
+
+            <!-- Popular Now -->
+            <div class="mb-6">
+                <h3 class="text-[#E6E1E5] mb-3">Popular Now</h3>
+                <div id="popular-items" class="space-y-3">
+                    <!-- JS renders popular items -->
+                </div>
+            </div>
+
+            <!-- All Menu Items -->
+            <div>
+                <h3 class="text-[#E6E1E5] mb-3">All Menu</h3>
+                <div id="all-items" class="grid grid-cols-2 gap-3">
+                    <!-- JS renders all items -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Tab -->
+    <div id="tab-profile" class="tab-content w-full min-h-screen pb-24 max-w-md mx-auto">
+        <div class="sticky top-0 bg-[#1C1B1F] z-10 px-4 py-4 border-b border-[#36343B]">
+            <h2 class="text-[#E6E1E5] text-lg font-semibold">Profile</h2>
+        </div>
+        <div class="px-4 py-6 space-y-4">
+            <div class="bg-[#2B2930] rounded-2xl p-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 bg-[#4A4458] rounded-full flex items-center justify-center">
+                        <i data-lucide="user" class="w-8 h-8 text-[#D0BCFF]"></i>
+                    </div>
+                    <div>
+                        <h3 id="profile-name" class="text-[#E6E1E5] mb-1">Loading...</h3>
+                        <p id="profile-email" class="text-[#CAC4D0] text-sm">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-[#2B2930] rounded-2xl p-4">
+                <h3 class="text-[#E6E1E5] mb-3">Preferences</h3>
+                <div class="space-y-2">
+                    <button onclick="showToast('Order history coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Order History</button>
+                    <button onclick="showToast('Saved addresses coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Saved Addresses</button>
+                    <button onclick="showToast('Payment methods coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Payment Methods</button>
+                </div>
+            </div>
+            <button onclick="handleLogout()" class="w-full bg-[#601410] text-[#F2B8B5] py-4 rounded-2xl hover:bg-[#8C1D18] transition-colors flex items-center justify-center gap-2">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Active Order Widget -->
+    <button id="active-order-widget" onclick="navigateTo('tracking.html')" class="hidden fixed bottom-20 left-4 right-4 bg-[#E8DEF8] text-[#381E72] rounded-full py-4 px-6 flex items-center gap-3 shadow-lg hover:bg-[#D0BCFF] transition-colors max-w-md mx-auto z-20 animate-slide-up">
+        <i id="active-order-icon" data-lucide="clock" class="w-5 h-5 flex-shrink-0 animate-pulse"></i>
+        <div class="flex-1 text-left">
+            <p id="active-order-id" class="text-sm font-semibold">Order #</p>
+            <p id="active-order-status" class="text-xs text-[#381E72]/80">Order Sent...</p>
+        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="flex-shrink-0">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- Bottom Navigation -->
+    <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-2 max-w-md mx-auto z-30">
+        <div class="flex items-center justify-around">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors bg-[#4A4458]">
+                <i data-lucide="home" class="w-6 h-6 fill-[#D0BCFF] text-[#D0BCFF]"></i>
+                <span class="text-xs text-[#D0BCFF]">Home</span>
+            </button>
+            <button onclick="document.getElementById('all-items').scrollIntoView({ behavior: 'smooth' })" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="file-text" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <span class="text-xs text-[#CAC4D0]">Menu</span>
+            </button>
+            <button onclick="navigateTo('cart.html')" class="relative flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="shopping-bag" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <div id="cart-badge" class="hidden absolute top-1 right-2 w-5 h-5 bg-[#F2B8B5] rounded-full flex items-center justify-center">
+                    <span id="cart-count" class="text-xs text-[#601410] font-bold">0</span>
+                </div>
+                <span class="text-xs text-[#CAC4D0]">Cart</span>
+            </button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+                <i data-lucide="user" class="w-6 h-6 text-[#CAC4D0]"></i>
+                <span class="text-xs text-[#CAC4D0]">Profile</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="app-toast"></div>
+    <script>
+        lucide.createIcons();
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) navigateTo('login.html');
+        const mahallah = JSON.parse(localStorage.getItem('selectedMahallah'));
+        if (!mahallah) navigateTo('location.html');
+
+        document.getElementById('mahallah-name').textContent = mahallah.name;
+        
+        let welcomeText = '';
+        if (mahallah.name.startsWith('Mahallah')) {
+            welcomeText = `Welcome to ${mahallah.name.replace('Mahallah ', '')} Cafe`;
+        } else {
+            welcomeText = `Welcome to ${mahallah.name}`;
+        }
+        document.getElementById('welcome-message').textContent = welcomeText;
+
+        const isMart = mahallah.type === 'mart';
+        const specialText = isMart 
+            ? "Today's Special: Buy 2 Lays Chips get 1 Free Coca-Cola!" 
+            : "Today's Special: Nasi Goreng USA with Free Egg!";
+        document.getElementById('special-text').textContent = specialText;
+
+        document.getElementById('profile-name').textContent = currentUser.name;
+        document.getElementById('profile-email').textContent = currentUser.email;
+
+        // Cart
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart.length > 0) {
+            document.getElementById('cart-badge').classList.remove('hidden');
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        // Active Order
+        const activeOrder = JSON.parse(localStorage.getItem('activeOrder'));
+        if (activeOrder) {
+            const widget = document.getElementById('active-order-widget');
+            widget.classList.remove('hidden');
+            document.getElementById('active-order-id').textContent = `Order #${activeOrder.id}`;
+            let statusText = 'Processing...';
+            if (activeOrder.status === 'sent') statusText = 'Order Sent...';
+            else if (activeOrder.status === 'preparing') statusText = 'Order is Preparing...';
+            else if (activeOrder.status === 'ready') statusText = 'Order Ready for Pickup!';
+            document.getElementById('active-order-status').textContent = statusText;
+        }
+
+        const cafeMenuItems = [
+            { id: '1', name: 'Nasi Goreng USA', price: 5.50, category: 'rice', image: 'images/nasigorengusa.jpg', popular: true },
+            { id: '2', name: 'Chicken Rice', price: 6.00, category: 'rice', image: 'images/chickenrice.jpg', popular: true },
+            { id: '3', name: 'Mee Goreng', price: 5.00, category: 'noodles', image: 'images/meegoreng.jpg', popular: true },
+            { id: '4', name: 'Chicken Chop', price: 8.50, category: 'western', image: 'images/chickenchop.jpg' },
+            { id: '5', name: 'Carbonara Pasta', price: 9.00, category: 'western', image: 'images/carbonara pasta.jpg' },
+            { id: '6', name: 'Iced Milo', price: 2.50, category: 'drinks', image: 'images/iced-milo-medium.webp' }
+        ];
+
+        const martMenuItems = [
+            { id: 'm1', name: 'Lays Potato Chips', price: 3.20, category: 'snacks', image: 'images/lays_chips.png', popular: true },
+            { id: 'm2', name: 'Oreo Cookies', price: 2.50, category: 'snacks', image: 'images/oreo_cookies.jpg', popular: true },
+            { id: 'm3', name: 'Coca-Cola Can', price: 2.00, category: 'drinks', image: 'images/coca_cola.png', popular: true },
+            { id: 'm4', name: 'Maggi Hot Cup', price: 3.00, category: 'instant', image: 'images/maggi_cup.png', popular: true },
+            { id: 'm5', name: 'Notebook & Pen', price: 2.50, category: 'essentials', image: 'images/notebook_pen.png', popular: false }
+        ];
+
+        const menuItems = isMart ? martMenuItems : cafeMenuItems;
+
+        const cafeCategories = [
+            { id: 'rice', label: 'Rice', emoji: '🍚' },
+            { id: 'noodles', label: 'Noodles', emoji: '🍜' },
+            { id: 'western', label: 'Western', emoji: '🍔' },
+            { id: 'drinks', label: 'Drinks', emoji: '🥤' }
+        ];
+
+        const martCategories = [
+            { id: 'snacks', label: 'Snacks', emoji: '🍿' },
+            { id: 'drinks', label: 'Drinks', emoji: '🥤' },
+            { id: 'instant', label: 'Instant', emoji: '🍜' },
+            { id: 'essentials', label: 'Essentials', emoji: '✏️' }
+        ];
+
+        const categories = isMart ? martCategories : cafeCategories;
+        let selectedCategory = 'all';
+
+        // Render Categories
+        const categoriesContainer = document.getElementById('categories-container');
+        categoriesContainer.innerHTML = categories.map(cat => `
+            <button onclick="filterCategory('${cat.id}')" id="cat-btn-${cat.id}" class="flex flex-col items-center gap-2 p-3 bg-[#2B2930] rounded-2xl hover:bg-[#4A4458] transition-colors">
+                <span class="text-2xl">${cat.emoji}</span>
+                <span class="text-xs text-[#E6E1E5]">${cat.label}</span>
+            </button>
+        `).join('');
+
+        function filterCategory(catId) {
+            // Remove highlight from all category buttons
+            categories.forEach(c => {
+                const btn = document.getElementById(`cat-btn-${c.id}`);
+                if (btn) btn.classList.remove('bg-[#4A4458]', 'border', 'border-[#D0BCFF]');
+            });
+
+            if (selectedCategory === catId) {
+                selectedCategory = 'all';
+            } else {
+                selectedCategory = catId;
+                const activeBtn = document.getElementById(`cat-btn-${catId}`);
+                if (activeBtn) activeBtn.classList.add('bg-[#4A4458]', 'border', 'border-[#D0BCFF]');
+            }
+
+            renderMenu();
+        }
+
+        function renderMenu() {
+            const filteredItems = selectedCategory === 'all' 
+                ? menuItems 
+                : menuItems.filter(item => item.category === selectedCategory);
+
+            // Render Popular
+            const popularItems = filteredItems.filter(i => i.popular);
+            const popularSection = document.getElementById('popular-items').parentElement;
+            if (popularItems.length > 0) {
+                popularSection.style.display = 'block';
+                const popularHtml = popularItems.map(item => `
+                    <button onclick='selectItem(${JSON.stringify(item)})' class="w-full bg-[#2B2930] rounded-2xl p-3 flex items-center gap-3 hover:bg-[#36343B] transition-all">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-20 rounded-xl object-cover" />
+                        <div class="flex-1 text-left">
+                            <h4 class="text-[#E6E1E5] mb-1 font-medium">${item.name}</h4>
+                            <p class="text-[#D0BCFF]">RM ${item.price.toFixed(2)}</p>
+                        </div>
+                        <div class="text-[#938F99]">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </button>
+                `).join('');
+                document.getElementById('popular-items').innerHTML = popularHtml;
+            } else {
+                popularSection.style.display = 'none';
+            }
+
+            // Render All
+            const allHtml = filteredItems.map(item => `
+                <button onclick='selectItem(${JSON.stringify(item)})' class="bg-[#2B2930] rounded-2xl overflow-hidden hover:bg-[#36343B] transition-all text-left">
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover" />
+                    <div class="p-3">
+                        <h4 class="text-[#E6E1E5] text-sm mb-1 font-medium">${item.name}</h4>
+                        <p class="text-[#D0BCFF] text-sm">RM ${item.price.toFixed(2)}</p>
+                    </div>
+                </button>
+            `).join('');
+            document.getElementById('all-items').innerHTML = allHtml;
+        }
+
+        // Initial Menu Render
+        renderMenu();
+
+        function selectItem(item) {
+            localStorage.setItem('selectedMenuItem', JSON.stringify(item));
+            navigateTo('menu.html');
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+
+            // Reset Nav styling
+            document.querySelectorAll('[id^="nav-"]').forEach(el => {
+                el.classList.remove('bg-[#4A4458]');
+                const icon = el.querySelector('i');
+                const text = el.querySelector('span');
+                icon.classList.remove('text-[#D0BCFF]', 'fill-[#D0BCFF]');
+                icon.classList.add('text-[#CAC4D0]');
+                text.classList.remove('text-[#D0BCFF]');
+                text.classList.add('text-[#CAC4D0]');
+            });
+
+            // Set Active Nav
+            const activeNav = document.getElementById(`nav-${tab}`);
+            activeNav.classList.add('bg-[#4A4458]');
+            const activeIcon = activeNav.querySelector('i');
+            const activeText = activeNav.querySelector('span');
+            activeIcon.classList.remove('text-[#CAC4D0]');
+            activeIcon.classList.add('text-[#D0BCFF]', 'fill-[#D0BCFF]');
+            activeText.classList.remove('text-[#CAC4D0]');
+            activeText.classList.add('text-[#D0BCFF]');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('selectedMahallah');
+            localStorage.removeItem('cart');
+            localStorage.removeItem('activeOrder');
+            navigateTo('login.html');
+        }
+    </script>
+</body>
+</html>

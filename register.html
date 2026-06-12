@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1C1B1F]">
+    
+    <div id="success-screen" class="hidden w-full min-h-screen px-4 py-8 flex flex-col items-center justify-center max-w-md mx-auto">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-[#A8DAB5] rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.971 16.971 21 12 21C7.029 21 3 16.971 3 12C3 7.029 7.029 3 12 3C16.971 3 21 7.029 21 12Z" stroke="#1F3823" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="text-[#E6E1E5] mb-2 text-xl font-semibold">Registration Successful!</h2>
+            <p class="text-[#CAC4D0] text-sm">Redirecting to login...</p>
+        </div>
+    </div>
+
+    <div id="register-screen" class="w-full min-h-screen px-4 py-8 max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-[#6750A4] to-[#D0BCFF] rounded-3xl flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="user-plus" class="w-10 h-10 text-white"></i>
+            </div>
+            <h1 class="text-[#E6E1E5] mb-2 text-xl font-semibold">Create Account</h1>
+            <p class="text-[#CAC4D0] text-sm">Join Cafe & Mart Click today</p>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="space-y-4 mb-6">
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Full Name *</label>
+                <input type="text" id="name" placeholder="Ahmad bin Abdullah" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Email *</label>
+                <input type="email" id="email" placeholder="student@iium.edu.my" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Matric / Staff Number *</label>
+                <input type="text" id="matricNo" placeholder="2012345 or STF001" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Password *</label>
+                <input type="password" id="password" placeholder="Minimum 3 characters" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div>
+                <label class="block text-[#CAC4D0] text-sm mb-2">Confirm Password *</label>
+                <input type="password" id="confirmPassword" placeholder="Re-enter password" class="w-full px-4 py-3 bg-[#2B2930] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF]">
+            </div>
+
+            <div id="error-msg" class="hidden bg-[#601410] text-[#F2B8B5] px-4 py-3 rounded-xl text-sm"></div>
+        </div>
+
+        <button onclick="handleRegister()" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors mb-4">
+            Create Account
+        </button>
+
+        <a href="login.html" class="block text-center w-full text-[#D0BCFF] text-sm hover:text-[#E8DEF8] transition-colors">
+            Already have an account? Sign in
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Initialize users if not present
+        if (!localStorage.getItem('users')) {
+            const mockUsers = [
+                { id: '1', name: 'Ahmad Student', email: 'student@iium.edu.my', password: '123', role: 'customer', matricNo: '2012345' },
+                { id: '2', name: 'Outlet Staff', email: 'staff@iium.edu.my', password: '123', role: 'staff', staffNo: 'STF001' }
+            ];
+            localStorage.setItem('users', JSON.stringify(mockUsers));
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const matricNo = document.getElementById('matricNo').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('error-msg');
+            
+            errorDiv.classList.add('hidden');
+
+            if (!name || !email || !password || !matricNo) {
+                errorDiv.textContent = 'All fields are required';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorDiv.textContent = 'Passwords do not match';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            if (password.length < 3) {
+                errorDiv.textContent = 'Password must be at least 3 characters';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users'));
+            
+            const existingUser = users.find(u => u.email === email || u.matricNo === matricNo || u.staffNo === matricNo);
+            if (existingUser) {
+                errorDiv.textContent = 'User with this email or matric number already exists';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            const newUser = {
+                id: (users.length + 1).toString(),
+                name,
+                email,
+                password,
+                role: 'customer',
+                matricNo
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Show success screen
+            document.getElementById('register-screen').classList.add('hidden');
+            document.getElementById('register-screen').classList.remove('flex'); // Just in case
+            
+            document.getElementById('success-screen').classList.remove('hidden');
+
+            setTimeout(() => {
+                navigateTo('login.html');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

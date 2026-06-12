@@ -1,0 +1,177 @@
+/* ═══════════════════════════════════════════════════════
+   iPhone 15 Pro Frame — 393 × 852 CSS viewport
+   ═══════════════════════════════════════════════════════ */
+
+html { background: #ffffff !important; }
+
+body {
+  background: #ffffff !important;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ── Device shell ── */
+.phone-device {
+  --screen-w: 393px;
+  --screen-h: 852px;
+  --bezel: 4px;
+  --device-w: calc(var(--screen-w) + var(--bezel) * 2);
+  --device-h: calc(var(--screen-h) + var(--bezel) * 2);
+  --device-radius: 55px;
+  --screen-radius: 50px;
+
+  position: relative;
+  width: var(--device-w);
+  height: var(--device-h);
+  background: #1a1a1c;
+  border-radius: var(--device-radius);
+  border: 1px solid #555;
+  box-shadow:
+    /* titanium edge highlight */
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    /* outer shadow */
+    0 40px 100px rgba(0,0,0,0.22),
+    0 12px 35px rgba(0,0,0,0.12);
+  overflow: visible;
+  flex-shrink: 0;
+
+  /* Scale to fit viewport */
+  transform-origin: center center;
+}
+
+/* Titanium side band */
+.phone-device::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--device-radius) + 2px);
+  border: 2px solid #8e8e93;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── Side buttons ── */
+/* Power (right) */
+.phone-btn-power {
+  position: absolute;
+  right: -3px;
+  top: 220px;
+  width: 4px;
+  height: 75px;
+  background: linear-gradient(90deg, #6e6e73, #8e8e93, #6e6e73);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Silent switch (left) */
+.phone-btn-silent {
+  position: absolute;
+  left: -3px;
+  top: 170px;
+  width: 4px;
+  height: 28px;
+  background: linear-gradient(270deg, #6e6e73, #8e8e93, #6e6e73);
+  border-radius: 2px 0 0 2px;
+}
+
+/* Volume up (left) */
+.phone-btn-volup {
+  position: absolute;
+  left: -3px;
+  top: 226px;
+  width: 4px;
+  height: 52px;
+  background: linear-gradient(270deg, #6e6e73, #8e8e93, #6e6e73);
+  border-radius: 2px 0 0 2px;
+}
+
+/* Volume down (left) */
+.phone-btn-voldn {
+  position: absolute;
+  left: -3px;
+  top: 290px;
+  width: 4px;
+  height: 52px;
+  background: linear-gradient(270deg, #6e6e73, #8e8e93, #6e6e73);
+  border-radius: 2px 0 0 2px;
+}
+
+/* ── Screen ── */
+.phone-screen {
+  position: absolute;
+  top: var(--bezel);
+  left: var(--bezel);
+  width: var(--screen-w);
+  height: var(--screen-h);
+  border-radius: var(--screen-radius);
+  overflow: hidden;
+  background: #1C1B1F;
+  /* Scopes position:fixed children to this container */
+  transform: translateZ(0);
+}
+
+/* ── Dynamic Island ── */
+.phone-island {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  height: 37px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* Camera lens inside island */
+.phone-island::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1a2a44 0%, #0d0d12 60%, #080810 100%);
+  box-shadow: inset 0 0 2px rgba(80,120,180,0.3);
+}
+
+/* ── Home indicator / gesture pill ── */
+.phone-pill {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 5px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 3px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* ── Scrollable content ── */
+.phone-screen-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.phone-screen-scroll::-webkit-scrollbar { width: 2px; }
+.phone-screen-scroll::-webkit-scrollbar-track { background: transparent; }
+.phone-screen-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* ── Override max-w-md: phone width IS the max ── */
+.phone-screen-scroll .max-w-md,
+.phone-screen .max-w-md {
+  max-width: 100% !important;
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cafe & Mart Click - Review</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="frame.css">
+    <script src="frame.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#1C1B1F]">
+    <!-- Success Screen -->
+    <div id="success-screen" class="hidden w-full min-h-screen px-4 py-8 flex flex-col items-center justify-center max-w-md mx-auto">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-[#A8DAB5] rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 12L11 14L15 10M21 12C21 16.971 16.971 21 12 21C7.029 21 3 16.971 3 12C3 7.029 7.029 3 12 3C16.971 3 21 7.029 21 12Z" stroke="#1F3823" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="text-[#E6E1E5] mb-2 text-xl font-semibold">Thank You!</h2>
+            <p class="text-[#CAC4D0] text-sm">Your feedback helps us improve</p>
+        </div>
+    </div>
+
+    <!-- Review Screen -->
+    <div id="review-screen" class="w-full min-h-screen px-4 py-6 max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-[#4A4458] rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="star" class="w-10 h-10 text-[#D0BCFF]"></i>
+            </div>
+            <h1 class="text-[#E6E1E5] mb-2 text-xl font-semibold">How was your experience?</h1>
+            <p id="header-desc" class="text-[#CAC4D0] text-sm">Order # from Mahallah</p>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="bg-[#2B2930] rounded-2xl p-4 mb-6">
+            <h3 class="text-[#E6E1E5] text-sm mb-3">Order Summary</h3>
+            <div id="order-summary" class="space-y-2">
+            </div>
+        </div>
+
+        <!-- Rating Component -->
+        <div class="bg-[#2B2930] rounded-2xl p-6 mb-6">
+            <h3 class="text-[#E6E1E5] text-center mb-4 font-semibold">Rate your order *</h3>
+            <div class="flex justify-center gap-3 mb-2">
+                <button onmouseover="hoverStar(1)" onmouseleave="hoverStar(0)" onclick="setRating(1)" class="star-btn transition-transform hover:scale-110">
+                    <i id="star-1" data-lucide="star" class="w-10 h-10 text-[#49454F] transition-colors"></i>
+                </button>
+                <button onmouseover="hoverStar(2)" onmouseleave="hoverStar(0)" onclick="setRating(2)" class="star-btn transition-transform hover:scale-110">
+                    <i id="star-2" data-lucide="star" class="w-10 h-10 text-[#49454F] transition-colors"></i>
+                </button>
+                <button onmouseover="hoverStar(3)" onmouseleave="hoverStar(0)" onclick="setRating(3)" class="star-btn transition-transform hover:scale-110">
+                    <i id="star-3" data-lucide="star" class="w-10 h-10 text-[#49454F] transition-colors"></i>
+                </button>
+                <button onmouseover="hoverStar(4)" onmouseleave="hoverStar(0)" onclick="setRating(4)" class="star-btn transition-transform hover:scale-110">
+                    <i id="star-4" data-lucide="star" class="w-10 h-10 text-[#49454F] transition-colors"></i>
+                </button>
+                <button onmouseover="hoverStar(5)" onmouseleave="hoverStar(0)" onclick="setRating(5)" class="star-btn transition-transform hover:scale-110">
+                    <i id="star-5" data-lucide="star" class="w-10 h-10 text-[#49454F] transition-colors"></i>
+                </button>
+            </div>
+            <p id="rating-text" class="text-center text-[#D0BCFF] text-sm h-5"></p>
+        </div>
+
+        <!-- Feedback Text Area -->
+        <div class="bg-[#2B2930] rounded-2xl p-4 mb-6">
+            <label class="block text-[#E6E1E5] mb-3 text-sm">Share your feedback (Optional)</label>
+            <textarea id="feedback" placeholder="Tell us about your experience..." rows="5" class="w-full px-4 py-3 bg-[#211F26] rounded-xl border border-[#49454F] text-[#E6E1E5] placeholder:text-[#938F99] focus:outline-none focus:border-[#D0BCFF] resize-none"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button onclick="handleSubmit()" class="w-full bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors flex items-center justify-center gap-2">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            <span>Submit Review</span>
+        </button>
+
+        <!-- Skip Button -->
+        <button onclick="skipReview()" class="w-full text-[#CAC4D0] text-sm mt-4 hover:text-[#E6E1E5] transition-colors">
+            Skip for now
+        </button>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const activeOrder = JSON.parse(localStorage.getItem('activeOrder'));
+        if (!activeOrder) navigateTo('home.html');
+
+        const mahallah = JSON.parse(localStorage.getItem('selectedMahallah'));
+        
+        document.getElementById('header-desc').textContent = `Order #${activeOrder.id} from ${mahallah.name}`;
+        
+        const summaryHtml = activeOrder.items.map(item => `
+            <div class="flex justify-between text-sm">
+                <span class="text-[#CAC4D0]">${item.quantity}x ${item.name}</span>
+            </div>
+        `).join('');
+        document.getElementById('order-summary').innerHTML = summaryHtml;
+
+        let rating = 0;
+
+        function updateStars(level) {
+            for (let i = 1; i <= 5; i++) {
+                const star = document.getElementById(`star-${i}`);
+                if (i <= level) {
+                    star.classList.replace('text-[#49454F]', 'text-[#FFD700]');
+                    star.classList.add('fill-[#FFD700]');
+                } else {
+                    star.classList.replace('text-[#FFD700]', 'text-[#49454F]');
+                    star.classList.remove('fill-[#FFD700]');
+                }
+            }
+        }
+
+        function hoverStar(val) {
+            if (val > 0) {
+                updateStars(val);
+            } else {
+                updateStars(rating);
+            }
+        }
+
+        function setRating(val) {
+            rating = val;
+            updateStars(val);
+            
+            let text = '';
+            if (val === 1) text = 'Poor';
+            if (val === 2) text = 'Fair';
+            if (val === 3) text = 'Good';
+            if (val === 4) text = 'Very Good';
+            if (val === 5) text = 'Excellent';
+            document.getElementById('rating-text').textContent = text;
+        }
+
+        function handleSubmit() {
+            if (rating === 0) {
+                alert('Please select a rating before submitting');
+                return;
+            }
+            
+            document.getElementById('review-screen').classList.add('hidden');
+            document.getElementById('success-screen').classList.remove('hidden');
+
+            localStorage.removeItem('activeOrder');
+
+            setTimeout(() => {
+                navigateTo('home.html');
+            }, 2000);
+        }
+
+        function skipReview() {
+            localStorage.removeItem('activeOrder');
+            navigateTo('home.html');
+        }
+    </script>
+</body>
+</html>
