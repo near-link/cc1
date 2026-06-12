@@ -83,9 +83,9 @@
             <div class="bg-[#2B2930] rounded-2xl p-4">
                 <h3 class="text-[#E6E1E5] mb-3">Preferences</h3>
                 <div class="space-y-2">
-                    <button onclick="showToast('Order history coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Order History</button>
-                    <button onclick="showToast('Saved addresses coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Saved Addresses</button>
-                    <button onclick="showToast('Payment methods coming soon')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Payment Methods</button>
+                    <button onclick="showToast('This is a demo!')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Order History</button>
+                    <button onclick="showToast('This is a demo!')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Saved Addresses</button>
+                    <button onclick="showToast('This is a demo!')" class="w-full text-left px-4 py-3 bg-[#211F26] rounded-xl text-[#CAC4D0] hover:bg-[#36343B] transition-colors">Payment Methods</button>
                 </div>
             </div>
             <button onclick="handleLogout()" class="w-full bg-[#601410] text-[#F2B8B5] py-4 rounded-2xl hover:bg-[#8C1D18] transition-colors flex items-center justify-center gap-2">
@@ -93,6 +93,76 @@
                 <span>Logout</span>
             </button>
         </div>
+
+    <!-- Cart Tab -->
+    <div id="tab-cart" class="tab-content w-full min-h-screen pb-32 max-w-md mx-auto relative">
+        <div class="sticky top-0 bg-[#1C1B1F] z-10 px-4 py-4 border-b border-[#36343B]">
+            <h2 class="text-[#E6E1E5] text-lg font-semibold">Cart & Checkout</h2>
+        </div>
+        <div class="px-4 py-4">
+            <!-- Location Alert -->
+            <div class="bg-[#4A4458] rounded-2xl p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="map-pin" class="w-5 h-5 text-[#D0BCFF] flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h4 class="text-[#D0BCFF] mb-1 font-semibold">Picking up from:</h4>
+                    <p id="pickup-location" class="text-[#EADDFF]">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Cart Items -->
+            <div class="mb-6">
+                <h3 class="text-[#E6E1E5] mb-3">Order Items</h3>
+                <div id="cart-items" class="space-y-3">
+                    <!-- JS renders cart items here -->
+                </div>
+            </div>
+
+            <!-- Payment Method -->
+            <div class="mb-6">
+                <h3 class="text-[#E6E1E5] mb-3">Payment Method</h3>
+                <div class="space-y-2">
+                    <button onclick="setPaymentMethod('online')" id="pay-online" class="payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#D0BCFF] bg-[#2B2930]">
+                        <div id="pay-online-circle" class="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#D0BCFF]">
+                            <div class="w-3 h-3 rounded-full bg-[#D0BCFF]"></div>
+                        </div>
+                        <i data-lucide="smartphone" class="w-5 h-5 text-[#CAC4D0]"></i>
+                        <span class="text-[#E6E1E5]">Online Banking / QR</span>
+                    </button>
+
+                    <button onclick="setPaymentMethod('cash')" id="pay-cash" class="payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F]">
+                        <div id="pay-cash-circle" class="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#938F99]">
+                        </div>
+                        <i data-lucide="credit-card" class="w-5 h-5 text-[#CAC4D0]"></i>
+                        <span class="text-[#E6E1E5]">Cash on Pickup</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="bg-[#2B2930] rounded-2xl p-4 mb-6">
+                <h3 class="text-[#E6E1E5] mb-3">Order Summary</h3>
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-[#CAC4D0]">
+                        <span>Subtotal</span>
+                        <span id="subtotal">RM 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-[#CAC4D0]">
+                        <span>Service Fee</span>
+                        <span id="service-fee">RM 0.50</span>
+                    </div>
+                </div>
+                <div class="border-t border-[#49454F] pt-3 flex justify-between">
+                    <span class="text-[#E6E1E5] font-semibold">Total</span>
+                    <span id="total" class="text-[#D0BCFF] font-semibold">RM 0.00</span>
+                </div>
+            </div>
+
+            <!-- Place Order Button -->
+            <button onclick="placeOrder()" id="btn-place-order" disabled class="w-full bg-[#D0BCFF] text-[#381E72] font-semibold py-4 rounded-full hover:bg-[#E8DEF8] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                Place Order - RM 0.00
+            </button>
+        </div>
+    </div>
     </div>
 
     <!-- Active Order Widget -->
@@ -114,11 +184,11 @@
                 <i data-lucide="home" class="w-6 h-6 fill-[#D0BCFF] text-[#D0BCFF]"></i>
                 <span class="text-xs text-[#D0BCFF]">Home</span>
             </button>
-            <button onclick="document.getElementById('all-items').scrollIntoView({ behavior: 'smooth' })" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+            <button onclick="goToMenu()" id="nav-menu" class="flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
                 <i data-lucide="file-text" class="w-6 h-6 text-[#CAC4D0]"></i>
                 <span class="text-xs text-[#CAC4D0]">Menu</span>
             </button>
-            <button onclick="navigateTo('cart.html')" class="relative flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
+            <button onclick="switchTab('cart')" id="nav-cart" class="relative flex flex-col items-center gap-1 px-4 py-2 rounded-full transition-colors">
                 <i data-lucide="shopping-bag" class="w-6 h-6 text-[#CAC4D0]"></i>
                 <div id="cart-badge" class="hidden absolute top-1 right-2 w-5 h-5 bg-[#F2B8B5] rounded-full flex items-center justify-center">
                     <span id="cart-count" class="text-xs text-[#601410] font-bold">0</span>
@@ -149,6 +219,7 @@
         if (!mahallah) navigateTo('location.html');
 
         document.getElementById('mahallah-name').textContent = mahallah.name;
+        document.getElementById('pickup-location').textContent = mahallah.name;
         
         let welcomeText = '';
         if (mahallah.name.startsWith('Mahallah')) {
@@ -167,12 +238,9 @@
         document.getElementById('profile-name').textContent = currentUser.name;
         document.getElementById('profile-email').textContent = currentUser.email;
 
-        // Cart
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        if (cart.length > 0) {
-            document.getElementById('cart-badge').classList.remove('hidden');
-            document.getElementById('cart-count').textContent = cart.length;
-        }
+        // Cart setup
+        let paymentMethod = 'online';
+        renderCart();
 
         // Active Order
         const activeOrder = JSON.parse(localStorage.getItem('activeOrder'));
@@ -300,30 +368,179 @@
             navigateTo('menu.html');
         }
 
-        function switchTab(tab) {
+        function switchTab(tab, activeNavId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
+            const targetTab = document.getElementById(`tab-${tab}`);
+            if(targetTab) targetTab.classList.add('active');
 
             // Reset Nav styling
             document.querySelectorAll('[id^="nav-"]').forEach(el => {
                 el.classList.remove('bg-[#4A4458]');
                 const icon = el.querySelector('i');
                 const text = el.querySelector('span');
-                icon.classList.remove('text-[#D0BCFF]', 'fill-[#D0BCFF]');
-                icon.classList.add('text-[#CAC4D0]');
-                text.classList.remove('text-[#D0BCFF]');
-                text.classList.add('text-[#CAC4D0]');
+                if(icon) {
+                    icon.classList.remove('text-[#D0BCFF]', 'fill-[#D0BCFF]');
+                    icon.classList.add('text-[#CAC4D0]');
+                }
+                if(text) {
+                    text.classList.remove('text-[#D0BCFF]');
+                    text.classList.add('text-[#CAC4D0]');
+                }
             });
 
             // Set Active Nav
-            const activeNav = document.getElementById(`nav-${tab}`);
-            activeNav.classList.add('bg-[#4A4458]');
-            const activeIcon = activeNav.querySelector('i');
-            const activeText = activeNav.querySelector('span');
-            activeIcon.classList.remove('text-[#CAC4D0]');
-            activeIcon.classList.add('text-[#D0BCFF]', 'fill-[#D0BCFF]');
-            activeText.classList.remove('text-[#CAC4D0]');
-            activeText.classList.add('text-[#D0BCFF]');
+            const navIdToActivate = activeNavId || `nav-${tab}`;
+            const activeNav = document.getElementById(navIdToActivate);
+            if (activeNav) {
+                activeNav.classList.add('bg-[#4A4458]');
+                const activeIcon = activeNav.querySelector('i');
+                const activeText = activeNav.querySelector('span');
+                if(activeIcon) {
+                    activeIcon.classList.remove('text-[#CAC4D0]');
+                    activeIcon.classList.add('text-[#D0BCFF]', 'fill-[#D0BCFF]');
+                }
+                if(activeText) {
+                    activeText.classList.remove('text-[#CAC4D0]');
+                    activeText.classList.add('text-[#D0BCFF]');
+                }
+            }
+
+            if (tab === 'cart') {
+                renderCart();
+            }
+        }
+
+        function goToMenu() {
+            switchTab('home', 'nav-menu');
+            setTimeout(() => {
+                document.getElementById('all-items').scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+        }
+
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartItemsContainer = document.getElementById('cart-items');
+            
+            if (cart.length > 0) {
+                document.getElementById('cart-badge').classList.remove('hidden');
+                document.getElementById('cart-count').textContent = cart.length;
+            } else {
+                document.getElementById('cart-badge').classList.add('hidden');
+            }
+
+            let subtotal = 0;
+            const serviceFee = 0.50;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p class="text-[#CAC4D0] text-sm">Your cart is empty.</p>`;
+                document.getElementById('subtotal').textContent = `RM 0.00`;
+                document.getElementById('total').textContent = `RM 0.00`;
+                const btn = document.getElementById('btn-place-order');
+                btn.disabled = true;
+                btn.textContent = `Place Order - RM 0.00`;
+            } else {
+                cartItemsContainer.innerHTML = cart.map((item, index) => {
+                    let itemTotal = item.price * item.quantity;
+                    let addEggHtml = '';
+                    let spicyLevelHtml = '';
+
+                    if (item.customizations?.addEgg) {
+                        itemTotal += 1.00 * item.quantity;
+                        addEggHtml = `<span>• Add Egg</span>`;
+                    }
+                    if (item.customizations?.spicyLevel) {
+                        spicyLevelHtml = `<span class="ml-2">• ${item.customizations.spicyLevel} spicy</span>`;
+                    }
+                    subtotal += itemTotal;
+
+                    return `
+                        <div class="bg-[#2B2930] rounded-2xl p-4 flex gap-3">
+                            <img src="${item.image}" alt="${item.name}" class="w-20 h-20 rounded-xl object-cover" />
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between">
+                                    <h4 class="text-[#E6E1E5] mb-1 font-medium">${item.name}</h4>
+                                    <button onclick="removeItem(${index})" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#601410] transition-colors flex-shrink-0">
+                                        <i data-lucide="x" class="w-4 h-4 text-[#938F99]"></i>
+                                    </button>
+                                </div>
+                                <div class="text-xs text-[#CAC4D0] mb-2">
+                                    ${addEggHtml}
+                                    ${spicyLevelHtml}
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[#938F99] text-sm">Qty: ${item.quantity}</span>
+                                    <span class="text-[#D0BCFF]">RM ${itemTotal.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const total = subtotal + serviceFee;
+                document.getElementById('subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+                document.getElementById('total').textContent = `RM ${total.toFixed(2)}`;
+                const btn = document.getElementById('btn-place-order');
+                btn.disabled = false;
+                btn.textContent = `Place Order - RM ${total.toFixed(2)}`;
+            }
+            lucide.createIcons();
+        }
+
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function setPaymentMethod(method) {
+            paymentMethod = method;
+            const onlineBtn = document.getElementById('pay-online');
+            const cashBtn = document.getElementById('pay-cash');
+            const onlineCircle = document.getElementById('pay-online-circle');
+            const cashCircle = document.getElementById('pay-cash-circle');
+
+            if (method === 'online') {
+                onlineBtn.className = "payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#D0BCFF] bg-[#2B2930]";
+                onlineCircle.className = "w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#D0BCFF]";
+                onlineCircle.innerHTML = '<div class="w-3 h-3 rounded-full bg-[#D0BCFF]"></div>';
+                cashBtn.className = "payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F]";
+                cashCircle.className = "w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#938F99]";
+                cashCircle.innerHTML = '';
+            } else {
+                cashBtn.className = "payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#D0BCFF] bg-[#2B2930]";
+                cashCircle.className = "w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#D0BCFF]";
+                cashCircle.innerHTML = '<div class="w-3 h-3 rounded-full bg-[#D0BCFF]"></div>';
+                onlineBtn.className = "payment-btn w-full flex items-center gap-3 p-4 rounded-xl border-2 transition-colors border-[#49454F] bg-[#1C1B1F]";
+                onlineCircle.className = "w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#938F99]";
+                onlineCircle.innerHTML = '';
+            }
+        }
+
+        function placeOrder() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) return;
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                let itemTotal = item.price * item.quantity;
+                if (item.customizations?.addEgg) itemTotal += 1.00 * item.quantity;
+                subtotal += itemTotal;
+            });
+            const total = subtotal + 0.50;
+
+            const order = {
+                id: Math.floor(1000 + Math.random() * 9000).toString(),
+                mahallahId: mahallah.id,
+                items: cart,
+                total: total,
+                status: 'sent',
+                paymentMethod
+            };
+
+            localStorage.setItem('activeOrder', JSON.stringify(order));
+            localStorage.setItem('cart', '[]');
+            navigateTo('tracking.html');
         }
 
         function handleLogout() {
