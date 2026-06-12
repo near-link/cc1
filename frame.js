@@ -9,7 +9,8 @@
     window.location.href = url;
   };
 
-  var isDesktop = window.innerWidth > 768;
+  // Check width AND ensure it's not a mobile device user agent
+  var isDesktop = window.innerWidth > 1024 && !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
   /* ── 1. Prevent flash (only on desktop) ── */
   if (isDesktop) {

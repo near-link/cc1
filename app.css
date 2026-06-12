@@ -8,7 +8,12 @@
 /* ── 1. Typography reset ── */
 *, *::before, *::after { box-sizing: border-box; }
 
+html {
+  background-color: #1C1B1F;
+}
+
 body {
+  background-color: #1C1B1F;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.4;
