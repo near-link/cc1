@@ -2,18 +2,20 @@
    iPhone 15 Pro Frame — 393 × 852 CSS viewport
    ═══════════════════════════════════════════════════════ */
 
-html { background: #ffffff !important; }
+@media (min-width: 769px) {
+  html { background: #ffffff !important; }
 
-body {
-  background: #ffffff !important;
-  margin: 0;
-  padding: 20px;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: system-ui, -apple-system, sans-serif;
-  box-sizing: border-box;
+  body {
+    background: #ffffff !important;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: system-ui, -apple-system, sans-serif;
+    box-sizing: border-box;
+  }
 }
 
 /* ── Device shell ── */
