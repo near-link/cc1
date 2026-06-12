@@ -150,13 +150,13 @@
             localStorage.removeItem('activeOrder');
 
             setTimeout(() => {
-                navigateTo('home.html');
+                window.location.href = 'home.html';
             }, 2000);
         }
 
         function skipReview() {
             localStorage.removeItem('activeOrder');
-            navigateTo('home.html');
+            window.location.href = 'home.html';
         }
     </script>
 </body>

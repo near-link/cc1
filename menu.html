@@ -13,12 +13,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-[#1C1B1F]">
-    <div class="fixed inset-0 z-50 flex items-end justify-center max-w-md mx-auto">
-        <div class="bg-[#1C1B1F] rounded-t-3xl w-full max-h-[100vh] h-full overflow-y-auto animate-slide-up flex flex-col pb-[56px]">
+    <div class="w-full min-h-screen bg-black/50 max-w-md mx-auto flex flex-col justify-end">
+        <div class="bg-[#1C1B1F] rounded-t-3xl w-full min-h-[90vh] flex flex-col animate-slide-up pb-24">
             <!-- Header -->
-            <div class="sticky top-0 bg-[#1C1B1F] z-10 px-6 py-4 border-b border-[#36343B] flex items-center justify-between">
+            <div class="sticky top-0 bg-[#1C1B1F] z-10 px-6 py-4 border-b border-[#36343B] flex items-center justify-between rounded-t-3xl">
                 <h3 class="text-[#E6E1E5]">Customize Order</h3>
-                <button onclick="navigateTo('home.html')" class="w-8 h-8 rounded-full hover:bg-[#2B2930] flex items-center justify-center">
+                <button onclick="window.location.href='home.html'" class="w-8 h-8 rounded-full hover:bg-[#2B2930] flex items-center justify-center">
                     <i data-lucide="x" class="w-5 h-5 text-[#CAC4D0]"></i>
                 </button>
             </div>
@@ -79,37 +79,12 @@
                 </div>
             </div>
 
-            <!-- Sticky Add to Cart Button -->
-            <div class="sticky bottom-[56px] mt-auto bg-[#1C1B1F] border-t border-[#36343B] px-6 py-4">
+            <!-- Fixed Add to Cart Button -->
+            <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#1C1B1F] border-t border-[#36343B] px-6 py-4 z-50">
                 <button onclick="handleAddToCart()" id="btn-add-to-cart" class="w-full bg-[#D0BCFF] text-[#381E72] py-4 rounded-full font-semibold hover:bg-[#E8DEF8] transition-colors shadow-lg">
                     Add to Cart - RM 0.00
                 </button>
             </div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <div class="fixed bottom-0 left-0 right-0 bg-[#211F26] border-t border-[#36343B] px-4 py-3 max-w-md mx-auto z-[60]">
-        <div class="flex items-center justify-around">
-            <button onclick="navigateTo('home.html?tab=home')" class="flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors">
-                <i data-lucide="home" class="w-5 h-5 text-[#CAC4D0]"></i>
-                <span class="text-[10px] leading-none mt-1 text-[#CAC4D0]">Home</span>
-            </button>
-            <button onclick="navigateTo('home.html?tab=menu')" class="flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors bg-[#4A4458]">
-                <i data-lucide="file-text" class="w-5 h-5 text-[#D0BCFF] fill-[#D0BCFF]"></i>
-                <span class="text-[10px] leading-none mt-1 text-[#D0BCFF]">Menu</span>
-            </button>
-            <button onclick="navigateTo('home.html?tab=cart')" class="relative flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors">
-                <i data-lucide="shopping-bag" class="w-5 h-5 text-[#CAC4D0]"></i>
-                <div id="cart-badge" class="hidden absolute top-0.5 right-2 w-3.5 h-3.5 bg-[#F2B8B5] rounded-full flex items-center justify-center">
-                    <span id="cart-count" class="text-[8px] text-[#601410] font-bold">0</span>
-                </div>
-                <span class="text-[10px] leading-none mt-1 text-[#CAC4D0]">Cart</span>
-            </button>
-            <button onclick="navigateTo('home.html?tab=profile')" class="flex flex-col items-center justify-center w-16 py-1.5 rounded-xl transition-colors">
-                <i data-lucide="user" class="w-5 h-5 text-[#CAC4D0]"></i>
-                <span class="text-[10px] leading-none mt-1 text-[#CAC4D0]">Profile</span>
-            </button>
         </div>
     </div>
 
